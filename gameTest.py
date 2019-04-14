@@ -109,6 +109,7 @@ def message_display(text):
     time.sleep(2)
     return
 
+#if you want to display this instead make it call game instead of menu I'm working on buttons to make a new files
 def game():
     x = (display_width * 0.25)
     y = (display_height * .5)
@@ -134,7 +135,7 @@ def menu():
                 quit()
         gameDisplay.fill(white)
         things(thing_startx, thing_starty, thing_width, thing_height, black)
-        message_display('Hello')
+        message_display('Fun Solitaire')
         pygame.display.update()
         clock.tick(15)
                                   
