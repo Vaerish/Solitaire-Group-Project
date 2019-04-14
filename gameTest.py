@@ -1,6 +1,20 @@
 import pygame
+import time
+import random
 from pygame.locals import *
+pygame.init()
 
+black = (0,0,0)
+white = (255, 255, 255) #color definitions
+red = (255, 0, 0)
+display_width = 1280
+display_height = 720
+crashed = False
+
+card_width = 150
+
+gameDisplay = pygame.display.set_mode((display_width, display_height))
+pygame.display.set_caption('Cool solitaire')
 
 diamondA = pygame.image.load('Cards/PNG/AD.png')
 diamondA = pygame.transform.scale(diamondA, (150, 200))
@@ -79,38 +93,63 @@ deck = [diamondA, clubA, heartA, spadeA, diamond6, club6, heart6, spade6, diamon
         diamond9, club9, heart9, spade9, diamond10, club10, heart10, spade10, diamondJ, clubJ, heartJ,
         spadeJ, diamondQ, clubQ, heartQ, spadeQ, diamondK, clubK , heartK, spadeK, diamondA ]
 
+def things(thingx, thingy, thingw, thingh, color):
+    pygame.draw.rect(gameDisplay, color, [thingx, thingy, thingw, thingh])
 
+def text_objects(text, font):
+    textSurface = font.render(text, True, black)
+    return textSurface, textSurface.get_rect()
 
+def message_display(text):
+    largeText = pygame.font.Font('freesansbold.ttf', 115)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = ((display_width/2),(display_height/2))
+    gameDisplay.blit(TextSurf, TextRect)
+    pygame.display.update()
+    time.sleep(2)
+    return
+
+def game():
+    x = (display_width * 0.25)
+    y = (display_height * .5)
+    while not crashed:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                crashed = True
+        gameDisplay.fill(white)
+        cardDis(x,y)
+        pygame.display.update()
+        clock.tick(15)
+def menu():
+    global crashed
+    thing_startx = 80
+    thing_starty = 600
+    thing_width = 300
+    thing_height = 50
+    while not crashed:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                crashed = True
+                pygame.quit()
+                quit()
+        gameDisplay.fill(white)
+        things(thing_startx, thing_starty, thing_width, thing_height, black)
+        message_display('Hello')
+        pygame.display.update()
+        clock.tick(15)
                                   
-black = (0,0,0)
-white = (255, 255, 255) #color definitions
-
-display_width = 1280
-display_height = 720
-
-x = (display_width * 0.25)
-y = (display_height * .5)
-
-pygame.init()
-
-gameDisplay = pygame.display.set_mode((display_width, display_height))
-pygame.display.set_caption('Cool solitaire')
-
 clock = pygame.time.Clock()
-crashed = False
+
 def cardDis(x,y):
     
     gameDisplay.blit(deck[0], (x, y))
+    
 
-while not crashed:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            crashed = True
-    gameDisplay.fill(white)
-    cardDis(x,y)
-    pygame.display.update()
-    clock.tick(60)
 
+
+
+
+menu()
 pygame.quit()
 quit()
 
