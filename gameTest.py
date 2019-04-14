@@ -109,6 +109,8 @@ def message_display(text):
     time.sleep(2)
     return
 
+def win():
+    message_display('You Win!!!!')
 #if you want to display this instead make it call game instead of menu I'm working on buttons to make a new files
 def game():
     x = (display_width * 0.25)
