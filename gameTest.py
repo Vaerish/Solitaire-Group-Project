@@ -6,7 +6,12 @@ pygame.init()
 
 black = (0,0,0)
 white = (255, 255, 255) #color definitions
-red = (255, 0, 0)
+red = (200, 0, 0)
+green = (0,200,0)
+
+bright_red = (255, 0, 0)
+bright_green = (0, 255, 0)
+
 display_width = 1280
 display_height = 720
 crashed = False
@@ -96,6 +101,26 @@ deck = [diamondA, clubA, heartA, spadeA, diamond6, club6, heart6, spade6, diamon
 def things(thingx, thingy, thingw, thingh, color):
     pygame.draw.rect(gameDisplay, color, [thingx, thingy, thingw, thingh])
 
+def button(msg,x,y,w,h,ic,ac, action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+    print(click)
+    if x+w > mouse[0] > x and y+h > mouse[1] > y:
+        pygame.draw.rect(gameDisplay, ac,(x,y,w,h))
+        if click[0] == 1 and action != None:
+            action()
+    else:
+        pygame.draw.rect(gameDisplay, ic,(x,y,w,h))
+    smallText = pygame.font.Font("freesansbold.ttf", 20)
+    textSurf, textRect = text_objects(msg, smallText)
+    textRect.center = ( (x+(w/2)), (y+(h/2)) )
+    gameDisplay.blit(textSurf, textRect)
+
+def quitGame():
+    print("Leaving")
+    pygame.quit()
+    quit()
+    
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
     return textSurface, textSurface.get_rect()
@@ -109,10 +134,10 @@ def message_display(text):
     time.sleep(2)
     return
 
-def win():
-    message_display('You Win!!!!')
-#if you want to display this instead make it call game instead of menu I'm working on buttons to make a new files
+#if you want to actually run game call game() at bottom as opposed to menu()
+# I am working on a button to link between them though
 def game():
+    global crashed
     x = (display_width * 0.25)
     y = (display_height * .5)
     while not crashed:
@@ -124,20 +149,23 @@ def game():
         pygame.display.update()
         clock.tick(15)
 def menu():
-    global crashed
-    thing_startx = 80
-    thing_starty = 600
-    thing_width = 300
-    thing_height = 50
-    while not crashed:
+    intro = True
+    while intro:
         for event in pygame.event.get():
+            #print(event)
             if event.type == pygame.QUIT:
-                crashed = True
                 pygame.quit()
                 quit()
         gameDisplay.fill(white)
-        things(thing_startx, thing_starty, thing_width, thing_height, black)
-        message_display('Fun Solitaire')
+        largeText = pygame.font.Font('freesansbold.ttf',100)
+        TextSurf, TextRect = text_objects("Solitaire The Best!", largeText)
+        TextRect.center = ((display_width/2),(display_height/2))
+        gameDisplay.blit(TextSurf, TextRect)
+        msg = "Go"
+        button(msg, 150, 450, 100, 50, green, bright_green, game)
+        button("Quit", 550, 450, 100, 50, red, bright_red, quitGame)
+        mouse = pygame.mouse.get_pos()
+        
         pygame.display.update()
         clock.tick(15)
                                   
@@ -147,12 +175,3 @@ def cardDis(x,y):
     
     gameDisplay.blit(deck[0], (x, y))
     
-
-
-
-
-
-menu()
-pygame.quit()
-quit()
-
