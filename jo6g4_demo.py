@@ -101,6 +101,10 @@ deck = [diamondA, clubA, heartA, spadeA, diamond6, club6, heart6, spade6, diamon
         spadeJ, diamondQ, clubQ, heartQ, spadeQ, diamondK, clubK, heartK, spadeK, diamondA]
 
 
+def __init__(self, x, y):
+    self.cards = []
+    self.rect = pygame.Rect(x, y, 71, 96)
+
 def things(thingx, thingy, thingw, thingh, color):
     pygame.draw.rect(gameDisplay, color, [thingx, thingy, thingw, thingh])
 
@@ -182,9 +186,85 @@ def menu():
 
 clock = pygame.time.Clock()
 
+def layout(screen):
+    outlineCard = pygame.image.load('Cards/PNG/deck_background.png')
+    screen.blit(outlineCard, (20, 20))
+    screen.blit(outlineCard, (100, 20))
+    screen.blit(outlineCard, (180, 20))
+    screen.blit(outlineCard, (260, 20))
+
+    # waste
+    screen.blit(outlineCard, (625, 20))
+
+    backofcardRed = pygame.image.load('Cards/PNG/red_back.png')
+    backofcardRed = pygame.transform.scale(backofcardRed, (150, 200))
+    backofcardPurple = pygame.image.load('Cards/PNG/purple_back.png')
+    backofcardPurple = pygame.transform.scale(backofcardPurple, (150, 200))
+    backofcardYellow = pygame.image.load('Cards/PNG/yellow_back.png')
+    backofcardYellow = pygame.transform.scale(backofcardYellow, (150, 200))
+
+    screen.blit(backofcardRed, (705, 20))
+    screen.blit(backofcardPurple, (725, 20))
+    screen.blit(backofcardYellow, (745, 20))
+
 
 def cardDis(x, y):
     gameDisplay.blit(deck[0], (x, y))
+    layout(gameDisplay)
+
+
+
+# def drawCards(self, screen, entireDeck):
+#     pygame.draw.rect(screen, black, [self.rect.left, self.rect.top, 71, 96], 2)
+#     j = self.y
+#     if len(self.hidden) > 0:
+#         for i in self.hidden:
+#             pygame.draw.rect(screen, red, [self.rect.left, i, 71, 96])
+#             pygame.draw.rect(screen, black, [self.rect.left, j, 71, 96], 2)
+#             j+=37
+#
+#     if len(self.cards) > 0:
+#         for i in self.cards:
+#             screen.blit(entireDeck[i],[self.rect.left,j])
+#             j+=37
+#
+# def drawMovedCards(self, screen, entireDeck):
+#     if self.moved:
+#         position = pygame.mouse.get_pos()
+#         xPos = position[0] - self.c[0]
+#         yPos = position[1] - self.c[1]
+#         for i in self.moved_card:
+#             screen.blit(entireDeck[i], [xPos , yPos])
+#             yPos += 10 # testing number
+#
+# def addCards(self, card):
+#     if len(self.cards) > 0 or len(self.hidden) > 0:
+#         for j in range(len(card)):
+#             self.rect.top += 2 #this is just a test
+#     else:
+#         for j in range(len(card)):
+#             if j > 0:
+#                 self.rect.top += 4 #again, just a test
+#     self.cards.extend(card)
+#
+#
+#
+#
+#
+#
+# def shuffle(deck):
+#     x = []
+#     length = len(deck)
+#     for j in range(length):
+#         if len(deck) > 1:
+#             q = random.choice(deck)
+#             x.append(q)
+#             deck.remove(q)
+#         else:
+#             q = deck.pop()
+#             x.append(q)
+#
+#     return x
 
 
 menu()
@@ -192,54 +272,3 @@ pygame.quit()
 quit()
 
 
-def drawCards(self, screen, entireDeck):
-    pygame.draw.rect(screen, black, [self.rect.left, self.rect.top, 71, 96], 2)
-    j = self.y
-    if len(self.hidden) > 0:
-        for i in self.hidden:
-            pygame.draw.rect(screen, red, [self.rect.left, i, 71, 96])
-            pygame.draw.rect(screen, black, [self.rect.left, j, 71, 96], 2)
-            j+=37
-
-    if len(self.cards) > 0:
-        for i in self.cards:
-            screen.blit(entireDeck[i],[self.rect.left,j])
-            j+=37
-
-def drawMovedCards(self, screen, entireDeck):
-    if self.moved:
-        position = pygame.mouse.get_pos()
-        xPos = position[0] - self.c[0]
-        yPos = position[1] - self.c[1]
-        for i in self.moved_card:
-            screen.blit(entireDeck[i], [xPos , yPos])
-            yPos += 10 # testing number
-
-def addCards(self, card):
-    if len(self.cards) > 0 or len(self.hidden) > 0:
-        for j in range(len(card)):
-            self.rect.top += 2 #this is just a test
-    else:
-        for j in range(len(card)):
-            if j > 0:
-                self.rect.top += 4 #again, just a test
-    self.cards.extend(card)
-
-
-
-
-
-
-def shuffle(deck):
-    x = []
-    length = len(deck)
-    for j in range(length):
-        if len(deck) > 1:
-            q = random.choice(deck)
-            x.append(q)
-            deck.remove(q)
-        else:
-            q = deck.pop()
-            x.append(q)
-
-    return x
