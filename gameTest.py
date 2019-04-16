@@ -175,3 +175,11 @@ def cardDis(x,y):
     
     gameDisplay.blit(deck[0], (x, y))
     
+
+
+
+
+
+menu()
+pygame.quit()
+quit()
