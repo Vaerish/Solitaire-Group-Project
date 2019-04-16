@@ -8,7 +8,6 @@ pygame.init()
 black = (0, 0, 0)
 white = (255, 255, 255)  # color definitions
 red = (200, 0, 0)
-blue = (0, 0, 238)
 green = (0, 200, 0)
 
 bright_red = (255, 0, 0)
@@ -19,10 +18,6 @@ display_height = 720
 crashed = False
 
 card_width = 150
-
-moved = False
-cards = None
-c = ()
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Cool solitaire')
@@ -147,10 +142,6 @@ def message_display(text):
     return
 
 
-
-
-
-
 # if you want to actually run game call game() at bottom as opposed to menu()
 # I am working on a button to link between them though
 def game():
@@ -194,6 +185,12 @@ clock = pygame.time.Clock()
 
 def cardDis(x, y):
     gameDisplay.blit(deck[0], (x, y))
+
+
+menu()
+pygame.quit()
+quit()
+
 
 def drawCards(self, screen, entireDeck):
     pygame.draw.rect(screen, black, [self.rect.left, self.rect.top, 71, 96], 2)
@@ -246,4 +243,3 @@ def shuffle(deck):
             x.append(q)
 
     return x
-
