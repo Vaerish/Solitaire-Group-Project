@@ -1,6 +1,7 @@
 import pygame
 import time
 import random
+import sys
 from pygame.locals import *
 
 pygame.init()
@@ -10,6 +11,10 @@ white = (255, 255, 255)  # color definitions
 red = (200, 0, 0)
 green = (0, 200, 0)
 
+
+cyan = (0,238,238)
+
+
 bright_red = (255, 0, 0)
 bright_green = (0, 255, 0)
 
@@ -17,8 +22,8 @@ display_width = 1280
 display_height = 720
 crashed = False
 
-card_width = 140
-card_height = 140
+card_width = 75
+card_height = 100
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Cool solitaire')
@@ -64,7 +69,7 @@ heart9 = pygame.transform.scale(heart9, (card_width, card_height))
 spade9 = pygame.image.load('Cards/PNG/9S.png')
 spade9 = pygame.transform.scale(spade9, (card_width, card_height))
 diamond10 = pygame.image.load('Cards/PNG/10D.png')
-diamond10 = pygame.transform.scale(diamond10, (150, card_height))
+diamond10 = pygame.transform.scale(diamond10, (card_width, card_height))
 club10 = pygame.image.load('Cards/PNG/10C.png')
 club10 = pygame.transform.scale(club10, (card_width, card_height))
 heart10 = pygame.image.load('Cards/PNG/10H.png')
@@ -96,10 +101,95 @@ heartK = pygame.transform.scale(heartK, (card_width, card_height))
 spadeK = pygame.image.load('Cards/PNG/KS.png')
 spadeK = pygame.transform.scale(spadeK, (card_width, card_height))
 
+
+
+# card_directory = {}
+#
+# card = pygame.image.load('Cards/PNG/AD.png').convert()
+# card_directory["ace_diamonds"] = card
+# card = pygame.image.load('Cards/PNG/AC.png').convert()
+# card_directory["ace_clubs"] = card
+# card = pygame.image.load('Cards/PNG/AH.png').convert()
+# card_directory["ace_hearts"] = card
+#
+# #######################################################
+# card = pygame.image.load('Cards/PNG/AS.png').convert()
+# card_directory["ace_spades"] = card
+# card = pygame.image.load('Cards/PNG/6D.png').convert()
+# card_directory["6_diamond"] = card
+# card = pygame.image.load('Cards/PNG/6C.png').convert()
+# card_directory["6_club"] = card
+
+
+# heart6 = pygame.image.load('Cards/PNG/6H.png')
+# heart6 = pygame.transform.scale(heart6, (card_width, card_height))
+# spade6 = pygame.image.load('Cards/PNG/6S.png')
+# spade6 = pygame.transform.scale(spade6, (card_width, card_height))
+# diamond7 = pygame.image.load('Cards/PNG/7D.png')
+# diamond7 = pygame.transform.scale(diamond7, (card_width, card_height))
+# club7 = pygame.image.load('Cards/PNG/7C.png')
+# club7 = pygame.transform.scale(club7, (card_width, card_height))
+# heart7 = pygame.image.load('Cards/PNG/7H.png')
+# heart7 = pygame.transform.scale(heart7, (card_width, card_height))
+# spade7 = pygame.image.load('Cards/PNG/7S.png')
+# spade7 = pygame.transform.scale(spade7, (card_width, card_height))
+# diamond8 = pygame.image.load('Cards/PNG/8D.png')
+# diamond8 = pygame.transform.scale(diamond8, (card_width, card_height))
+# club8 = pygame.image.load('Cards/PNG/8C.png')
+# club8 = pygame.transform.scale(club8, (card_width, card_height))
+# heart8 = pygame.image.load('Cards/PNG/8H.png')
+# heart8 = pygame.transform.scale(heart8, (card_width, card_height))
+# spade8 = pygame.image.load('Cards/PNG/8S.png')
+# spade8 = pygame.transform.scale(spade8, (card_width, card_height))
+# diamond9 = pygame.image.load('Cards/PNG/9D.png')
+# diamond9 = pygame.transform.scale(diamond9, (card_width, card_height))
+# club9 = pygame.image.load('Cards/PNG/9C.png')
+# club9 = pygame.transform.scale(club9, (card_width, card_height))
+# heart9 = pygame.image.load('Cards/PNG/9H.png')
+# heart9 = pygame.transform.scale(heart9, (card_width, card_height))
+# spade9 = pygame.image.load('Cards/PNG/9S.png')
+# spade9 = pygame.transform.scale(spade9, (card_width, card_height))
+# diamond10 = pygame.image.load('Cards/PNG/10D.png')
+# diamond10 = pygame.transform.scale(diamond10, (150, card_height))
+# club10 = pygame.image.load('Cards/PNG/10C.png')
+# club10 = pygame.transform.scale(club10, (card_width, card_height))
+# heart10 = pygame.image.load('Cards/PNG/10H.png')
+# heart10 = pygame.transform.scale(heart10, (card_width, card_height))
+# spade10 = pygame.image.load('Cards/PNG/10S.png')
+# spade10 = pygame.transform.scale(spade10, (card_width, card_height))
+# diamondJ = pygame.image.load('Cards/PNG/JD.png')
+# diamondJ = pygame.transform.scale(diamondJ, (card_width, card_height))
+# clubJ = pygame.image.load('Cards/PNG/JC.png')
+# clubJ = pygame.transform.scale(clubJ, (card_width, card_height))
+# heartJ = pygame.image.load('Cards/PNG/JH.png')
+# heartJ = pygame.transform.scale(heartJ, (card_width, card_height))
+# spadeJ = pygame.image.load('Cards/PNG/JS.png')
+# spadeJ = pygame.transform.scale(spadeJ, (card_width, card_height))
+# diamondQ = pygame.image.load('Cards/PNG/QD.png')
+# diamondQ = pygame.transform.scale(diamondQ, (card_width, card_height))
+# clubQ = pygame.image.load('Cards/PNG/QC.png')
+# clubQ = pygame.transform.scale(clubQ, (card_width, card_height))
+# heartQ = pygame.image.load('Cards/PNG/QH.png')
+# heartQ = pygame.transform.scale(heartQ, (card_width, card_height))
+# spadeQ = pygame.image.load('Cards/PNG/QS.png')
+# spadeQ = pygame.transform.scale(spadeQ, (card_width, card_height))
+# diamondK = pygame.image.load('Cards/PNG/KD.png')
+# diamondK = pygame.transform.scale(diamondK, (card_width, card_height))
+# clubK = pygame.image.load('Cards/PNG/KC.png')
+# clubK = pygame.transform.scale(clubK, (card_width, card_height))
+# heartK = pygame.image.load('Cards/PNG/KH.png')
+# heartK = pygame.transform.scale(heartK, (card_width, card_height))
+# spadeK = pygame.image.load('Cards/PNG/KS.png')
+# spadeK = pygame.transform.scale(spadeK, (card_width, card_height))
+
+
+
+
+
 deck = [diamondA, clubA, heartA, spadeA, diamond6, club6, heart6, spade6, diamond7, club7, heart7, spade7, diamond8,
         club8, heart8, spade8,
         diamond9, club9, heart9, spade9, diamond10, club10, heart10, spade10, diamondJ, clubJ, heartJ,
-        spadeJ, diamondQ, clubQ, heartQ, spadeQ, diamondK, clubK, heartK, spadeK, diamondA]
+        spadeJ, diamondQ, clubQ, heartQ, spadeQ, diamondK, clubK, heartK, spadeK]
 
 
 def __init__(self, x, y):
@@ -129,6 +219,11 @@ def button(msg, x, y, w, h, ic, ac, action=None):
 def quitGame():
     print("Leaving")
     pygame.quit()
+    quit()
+
+def quitInGame():
+    print("Thanks for playing")
+    pygame.quit
     quit()
 
 
@@ -187,35 +282,73 @@ def menu():
 
 clock = pygame.time.Clock()
 
-def layout(screen):
+def layout(screen,deck):
+
     outlineCard = pygame.image.load('Cards/PNG/deck_background.png')
+    outlineCard = pygame.transform.scale(outlineCard, (80, 100))
     screen.blit(outlineCard, (20, 20))
-    screen.blit(outlineCard, (100, 20))
+    # screen.blit(outlineCard, (100, 20))
     screen.blit(outlineCard, (180, 20))
-    screen.blit(outlineCard, (260, 20))
+    screen.blit(outlineCard, (360, 20))
 
     # waste
     screen.blit(outlineCard, (560, 20))
 
     backofcardRed = pygame.image.load('Cards/PNG/red_back.png')
-    backofcardRed = pygame.transform.scale(backofcardRed, (140, 140))
+    backofcardRed = pygame.transform.scale(backofcardRed, (80, 100))
     backofcardPurple = pygame.image.load('Cards/PNG/purple_back.png')
-    backofcardPurple = pygame.transform.scale(backofcardPurple, (140, 140))
+    backofcardPurple = pygame.transform.scale(backofcardPurple, (80, 100))
     backofcardYellow = pygame.image.load('Cards/PNG/yellow_back.png')
-    backofcardYellow = pygame.transform.scale(backofcardYellow, (140, 140))
+    backofcardYellow = pygame.transform.scale(backofcardYellow, (80, 100))
 
-    screen.blit(backofcardRed, (725, 20))
-    screen.blit(backofcardPurple, (750, 20))
-    screen.blit(backofcardYellow, (780, 20))
+
+    screen.blit(backofcardRed, (20, 50))
+    mouseX, mouseY = pygame.mouse.get_pos()
+    # screen.blit(backofcardRed, (mouseX - 50, mouseY - 50))
+    screen.blit(backofcardPurple, (180, 50))
+    screen.blit(backofcardYellow, (360, 50))
+
+    deckLen = len(deck)
+    # for i in range(1, deckLen):
+    #     clock.tick(60)
+    #     screen.blit(deck[i], (20, 20))
+    #     pygame.display.flip()
+
+    running = True
+    while running :
+        for event in pygame.event.get():
+            for i in range(1,deckLen):
+                pygame.display.flip()
+                clock.tick(10)
+                screen.blit(deck[i],(20,20))
+                pygame.display.update()
+            if event.type == MOUSEBUTTONDOWN:
+                mouseX, mouseY = pygame.mouse.get_pos()
+                # screen.blit(backofcardRed, (mouseX - 50, mouseY - 50))
+                pygame.display.flip()
+            elif event.type == K_ESCAPE:
+                pygame.quit()
+                running = False
+
+        # screen.blit(backofcardPurple, (mouseX, mouseY))
+        # screen.blit(backofcardYellow, (mouseX, mouseY))
+    # screen.blit(backofcardRed, (mouseX-50, mouseY-50))
+    # clock.tick(60)
+    pygame.display.flip()
+
+
+
+         # screen.blit(backofcardPurple, (mouseX, mouseY))
+         # screen.blit(backofcardYellow, (mouseX, mouseY))
 
 
 def cardDis(x, y):
-    gameDisplay.blit(deck[0], (x, y))
-    layout(gameDisplay)
-    deckLen = len(deck)
-    for i in range(deckLen):
-        gameDisplay.blit(deck[i],(20,20))
-        random.shuffle(deck)
+    layout(gameDisplay,deck)
+
+
+
+
+
 
 
 
