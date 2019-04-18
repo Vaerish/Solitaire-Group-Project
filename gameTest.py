@@ -2,15 +2,17 @@ import pygame
 import time
 import random
 from pygame.locals import *
+
 pygame.init()
 
 black = (0,0,0)
 white = (255, 255, 255) #color definitions
-red = (200, 0, 0)
-green = (0,200,0)
+gray = (83, 85, 83)
+red = (153, 18, 18)
+green = (47, 110, 41)
 
-bright_red = (255, 0, 0)
-bright_green = (0, 255, 0)
+bright_red = (46, 7, 7)
+bright_green = (16, 34, 14)
 
 display_width = 1280
 display_height = 720
@@ -96,7 +98,7 @@ spadeK = pygame.transform.scale(spadeK, (150, 200))
 
 deck = [diamondA, clubA, heartA, spadeA, diamond6, club6, heart6, spade6, diamond7, club7, heart7, spade7, diamond8, club8, heart8, spade8,
         diamond9, club9, heart9, spade9, diamond10, club10, heart10, spade10, diamondJ, clubJ, heartJ,
-        spadeJ, diamondQ, clubQ, heartQ, spadeQ, diamondK, clubK , heartK, spadeK, diamondA ]
+        spadeJ, diamondQ, clubQ, heartQ, spadeQ, diamondK, clubK , heartK, spadeK, diamondA]
 
 def things(thingx, thingy, thingw, thingh, color):
     pygame.draw.rect(gameDisplay, color, [thingx, thingy, thingw, thingh])
@@ -134,20 +136,55 @@ def message_display(text):
     time.sleep(2)
     return
 
-#if you want to actually run game call game() at bottom as opposed to menu()
+def shuffle(x, y):
+    for pile in range(100, 1100, 200):
+        cardDis(pile, y)
+    pygame.display.update()
+
+def cardDis(x, y):
+    randomCard = random.randint(0, len(deck) - 1)
+    gameDisplay.blit(deck[randomCard], (x, y))
+
+
+# if you want to actually run game call game() at bottom as opposed to menu()
 # I am working on a button to link between them though
 def game():
     global crashed
     x = (display_width * 0.25)
     y = (display_height * .5)
+    beginning = True
+    click = True
     while not crashed:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                crashed = True
-        gameDisplay.fill(white)
-        cardDis(x,y)
-        pygame.display.update()
+                pygame.quit()
+                quit()
+        ###########################################################################
+        # this function uses to create a button to shuffering the cards
+        # It is used for testing purpose but could be use in the game
+        # when the player need refresh the cards from Draw Pile or restart the game
+        # #########################################################################
+        if (pygame.mouse.get_pressed()[0]):
+            if (pygame.mouse.get_pos()[0] >= 700
+                    and pygame.mouse.get_pos()[0] <= 800
+                    and pygame.mouse.get_pos()[1] >= 0
+                    and pygame.mouse.get_pos()[1] <= 100):
+                button("Refresh", 700, 0, 100, 100, red, white, shuffle(x, y))
+                print(pygame.mouse.get_pos()[0])
+                print(pygame.mouse.get_pos()[1])
+                pygame.display.update()
+        gameDisplay.fill(green)
+
+        # initilizes the button and cards, the button doesn't have function
+        # at beginning
+        if (beginning == True):
+            button("Refresh", 700, 0, 100, 100, white, bright_red, shuffle(x, y))
+            beginning = False
+            click = pygame.mouse.get_pressed()
+            pygame.display.update()
         clock.tick(15)
+
+
 def menu():
     intro = True
     while intro:
@@ -156,14 +193,14 @@ def menu():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        gameDisplay.fill(white)
+        gameDisplay.fill(gray)
         largeText = pygame.font.Font('freesansbold.ttf',100)
         TextSurf, TextRect = text_objects("Solitaire The Best!", largeText)
         TextRect.center = ((display_width/2),(display_height/2))
         gameDisplay.blit(TextSurf, TextRect)
         msg = "Go"
-        button(msg, 150, 450, 100, 50, green, bright_green, game)
-        button("Quit", 550, 450, 100, 50, red, bright_red, quitGame)
+        button(msg, 150, 450, 150, 60, green, bright_green, game)
+        button("Quit", 950, 450, 150, 60, red, bright_red, quitGame)
         mouse = pygame.mouse.get_pos()
         
         pygame.display.update()
@@ -174,10 +211,6 @@ clock = pygame.time.Clock()
 def cardDis(x,y):
     
     gameDisplay.blit(deck[0], (x, y))
-    
-
-
-
 
 
 menu()
