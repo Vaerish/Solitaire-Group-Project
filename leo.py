@@ -173,7 +173,7 @@ def game():
                         print(pygame.mouse.get_pos()[1])
                         pygame.display.update()
         gameDisplay.fill(green)
-
+        layout(gameDisplay)
         #initilizes the button and cards, the button doesn't have function
         # at beginning
         if (beginning == True):
@@ -206,7 +206,31 @@ def menu():
                                   
 clock = pygame.time.Clock()
 
+def layout(screen):
+    outlineCard = pygame.image.load('Cards/PNG/gosnel.jpg')
+    screen.blit(outlineCard, (20, 20))
+    screen.blit(outlineCard, (100, 20))
+    screen.blit(outlineCard, (180, 20))
+    screen.blit(outlineCard, (260, 20))
+
+    # waste
+    screen.blit(outlineCard, (560, 20))
+
+    backofcardRed = pygame.image.load('Cards/PNG/red_back.png')
+    backofcardRed = pygame.transform.scale(backofcardRed, (140, 140))
+    backofcardPurple = pygame.image.load('Cards/PNG/purple_back.png')
+    backofcardPurple = pygame.transform.scale(backofcardPurple, (140, 140))
+    backofcardYellow = pygame.image.load('Cards/PNG/yellow_back.png')
+    backofcardYellow = pygame.transform.scale(backofcardYellow, (140, 140))
+
+    screen.blit(backofcardRed, (725, 20))
+    screen.blit(backofcardPurple, (750, 20))
+    screen.blit(backofcardYellow, (780, 20))
+
+
+
 def cardDis(x,y):
+        
         randomCard = random.randint(0,len(deck)-1)
         gameDisplay.blit(deck[randomCard], (x, y))
 
