@@ -2,19 +2,26 @@ import pygame
 import time
 import random
 from pygame.locals import *
+
 pygame.init()
-clock = pygame.time.Clock()
+
 black = (0,0,0)
 white = (255, 255, 255) #color definitions
-red = (200, 0, 0)
-green = (0,200,0)
+gray = (83, 85, 83)
+red = (153, 18, 18)
+green = (47, 110, 41)
 
-bright_red = (255, 0, 0)
-bright_green = (0, 255, 0)
+bright_red = (46, 7, 7)
+bright_green = (16, 34, 14)
 
 display_width = 1280
 display_height = 720
 crashed = False
+
+card_width = 150
+
+gameDisplay = pygame.display.set_mode((display_width, display_height))
+pygame.display.set_caption('Cool solitaire')
 
 card_width = 150
 card_length = 200
@@ -22,8 +29,8 @@ card_length = 200
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Cool solitaire')
 
-faceDown = pygame.image.load('Cards/PNG/gosnel.jpg')
-faceDown = pygame.transform.scale(faceDown,(card_width,card_length))
+#faceDown = pygame.image.load('Cards/PNG/gosnel.jpg')
+#faceDown = pygame.transform.scale(faceDown,(card_width,card_length))
 diamondA = pygame.image.load('Cards/PNG/AD.png')
 diamondA = pygame.transform.scale(diamondA, (card_width,card_length))
 clubA = pygame.image.load('Cards/PNG/AC.png')
@@ -99,7 +106,7 @@ spadeK = pygame.transform.scale(spadeK, (card_width, card_length))
 
 deck = [diamondA, clubA, heartA, spadeA, diamond6, club6, heart6, spade6, diamond7, club7, heart7, spade7, diamond8, club8, heart8, spade8,
         diamond9, club9, heart9, spade9, diamond10, club10, heart10, spade10, diamondJ, clubJ, heartJ,
-        spadeJ, diamondQ, clubQ, heartQ, spadeQ, diamondK, clubK , heartK, spadeK, diamondA ]
+        spadeJ, diamondQ, clubQ, heartQ, spadeQ, diamondK, clubK , heartK, spadeK, diamondA]
 
 
 def things(thingx, thingy, thingw, thingh, color):
@@ -143,22 +150,25 @@ def message_display(text):
     return
 
 
-# function will randomly generates the cards in desk array and place on the UI
-# NOTE: should rezise or rescale the cards to make sure they can fix for all seven piles
-def shuffle(x,y):
-        for pile in range(100,1100,200):
-                cardDis(pile,y)
-        pygame.display.update()
-                
+def shuffle(x, y):
+    for pile in range(100, 1100, 200):
+        cardDis(pile, y)
+    pygame.display.update()
 
-#if you want to actually run game call game() at bottom as opposed to menu()
-# I am working on a button to link between them though
+
+def cardDis(x, y):
+    randomCard = random.randint(0, len(deck) - 1)
+    gameDisplay.blit(deck[randomCard], (x, y))
+
+
+# this leo's game function that I pulled from his
 def game():
     global crashed
     x = (display_width * 0.25)
     y = (display_height * .5)
     beginning = True
     click = True
+    mouse = pygame.mouse.get_pos()
     while not crashed:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -168,24 +178,22 @@ def game():
         # this function uses to create a button to shuffering the cards
         # It is used for testing purpose but could be use in the game
         # when the player need refresh the cards from Draw Pile or restart the game
-        # #########################################################################     
-        if(pygame.mouse.get_pressed()[0]):
-                if(pygame.mouse.get_pos()[0]>=700 
-                        and pygame.mouse.get_pos()[0]<=800 
-                        and pygame.mouse.get_pos()[1]>=0
-                        and pygame.mouse.get_pos()[1]<=100):
-                        button("Refresh",700,0,100,100,white,white,shuffle(x,y))
-                        print(pygame.mouse.get_pos()[0])
-                        print(pygame.mouse.get_pos()[1])
-                        pygame.display.update()
+        # #########################################################################
+        if (pygame.mouse.get_pressed()[0]):
+            if (pygame.mouse.get_pos()[0] >= 700 and pygame.mouse.get_pos()[0] <= 800 and pygame.mouse.get_pos()[1] >= 0 and pygame.mouse.get_pos()[1] <= 100):
+                button("Refresh", 700, 0, 100, 100, red, white, shuffle(x, y))
+                print(pygame.mouse.get_pos()[0])
+                print(pygame.mouse.get_pos()[1])
+                pygame.display.update()
         gameDisplay.fill(green)
 
-        #initilizes the button and cards, the button doesn't have function
+        # initilizes the button and cards, the button doesn't have function
         # at beginning
-        if (beginning == True):
-                button("Refresh",700,0,100,100,white,bright_red,shuffle(x,y))         
-                beginning = False
-                pygame.display.update() 
+        if beginning == True:
+            button("Refresh", 700, 0, 100, 100, white, bright_red, shuffle(x, y))
+            beginning = False
+            click = pygame.mouse.get_pressed()
+            pygame.display.update()
         clock.tick(15)
 
 
@@ -197,15 +205,14 @@ def menu():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-        gameDisplay.fill(white)
+        gameDisplay.fill(gray)
         largeText = pygame.font.Font('freesansbold.ttf',100)
         TextSurf, TextRect = text_objects("Solitaire The Best!", largeText)
         TextRect.center = ((display_width/2),(display_height/2))
         gameDisplay.blit(TextSurf, TextRect)
         msg = "Go"
-        button(msg, 150, 450, 100, 50, green, bright_green, game)
-        button("Quit", 550, 450, 100, 50, red, bright_red, quitGame)
-        
+        button(msg, 150, 450, 150, 60, green, bright_green, game) #colors were changed to try and make them look pretty
+        button("Quit", 950, 450, 150, 60, red, bright_red, quitGame)
         mouse = pygame.mouse.get_pos()
         
         pygame.display.update()
@@ -213,10 +220,9 @@ def menu():
                                   
 clock = pygame.time.Clock()
 
-
 def cardDis(x,y):
-        randomCard = random.randint(0,len(deck)-1)
-        gameDisplay.blit(deck[randomCard], (x, y))
+    
+    gameDisplay.blit(deck[0], (x, y))
 
 
 menu()
