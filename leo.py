@@ -8,6 +8,7 @@ black = (0,0,0)
 white = (255, 255, 255) #color definitions
 red = (200, 0, 0)
 green = (0,200,0)
+cyan = (0,238,238)
 
 bright_red = (255, 0, 0)
 bright_green = (0, 255, 0)
@@ -18,8 +19,19 @@ crashed = False
 
 card_width = 150
 
+size = bgWidth, bgHeight = 600,400
+
+# class Background(pygame.sprite.Sprite):
+#     def __init__(self, image_file, location):
+#         pygame.sprite.Sprite.__init__(self)
+#         self.image = pygame.image.load(image_file)
+#         self.rect = self.image.get_rect()
+#         self.rect.left, self.rect.top = location
+
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Cool solitaire')
+
+
 
 faceDown = pygame.image.load('Cards/PNG/gosnel.jpg')
 faceDown = pygame.transform.scale(faceDown,(150,200))
@@ -122,6 +134,11 @@ def quitGame():
     print("Leaving")
     pygame.quit()
     quit()
+
+def quitInGame():
+    print("Thanks for playing")
+    pygame.quit
+    quit()
     
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -176,6 +193,7 @@ def game():
         layout(gameDisplay)
         #initilizes the button and cards, the button doesn't have function
         # at beginning
+        button("Leave Game", 1100, 0, 150, 100, cyan, red, quitInGame)
         if (beginning == True):
                 button("Refresh",700,0,100,100,white,bright_red,shuffle(x,y))         
                 beginning = False
@@ -207,25 +225,42 @@ def menu():
 clock = pygame.time.Clock()
 
 def layout(screen):
-    outlineCard = pygame.image.load('Cards/PNG/gosnel.jpg')
+    background = pygame.image.load('Cards/PNG/gosnel.jpg')
+    background = pygame.transform.scale(background,(display_width,display_height))
+    screen.blit(background,(0,0))
+
+    # screen.blit(background, (20, 20))
+    # screen.blit(background, (100, 20))
+    # screen.blit(background, (180, 20))
+    # screen.blit(background, (260, 20))
+    outlineCard = pygame.image.load('Cards/PNG/deck_background.png')
+    outlineCard = pygame.transform.scale(outlineCard, (80, 100))
     screen.blit(outlineCard, (20, 20))
-    screen.blit(outlineCard, (100, 20))
+    # screen.blit(outlineCard, (100, 20))
     screen.blit(outlineCard, (180, 20))
-    screen.blit(outlineCard, (260, 20))
+    screen.blit(outlineCard, (360, 20))
 
     # waste
     screen.blit(outlineCard, (560, 20))
 
     backofcardRed = pygame.image.load('Cards/PNG/red_back.png')
-    backofcardRed = pygame.transform.scale(backofcardRed, (140, 140))
+    backofcardRed = pygame.transform.scale(backofcardRed, (80, 100))
     backofcardPurple = pygame.image.load('Cards/PNG/purple_back.png')
-    backofcardPurple = pygame.transform.scale(backofcardPurple, (140, 140))
+    backofcardPurple = pygame.transform.scale(backofcardPurple, (80, 100))
     backofcardYellow = pygame.image.load('Cards/PNG/yellow_back.png')
-    backofcardYellow = pygame.transform.scale(backofcardYellow, (140, 140))
+    backofcardYellow = pygame.transform.scale(backofcardYellow, (80, 100))
 
-    screen.blit(backofcardRed, (725, 20))
-    screen.blit(backofcardPurple, (750, 20))
-    screen.blit(backofcardYellow, (780, 20))
+    screen.blit(backofcardRed, (20, 50))
+    mouseX, mouseY = pygame.mouse.get_pos()
+    # screen.blit(backofcardRed, (mouseX - 50, mouseY - 50))
+    screen.blit(backofcardPurple, (180, 50))
+    screen.blit(backofcardYellow, (360, 50))
+
+
+    # waste
+    screen.blit(background, (560, 20))
+
+
 
 
 
