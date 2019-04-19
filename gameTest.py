@@ -36,7 +36,7 @@ class Card:
         suit = nSuit
         face = nFace
 
-    def image(slef):
+    def image(self):
         temp = pygame.image.load("Cards/PNG/{}{}.png".format(self.face, self.suit))
         return pygame.transform.scale(temp, (card_width,card_length))
 
