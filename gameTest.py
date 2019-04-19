@@ -18,12 +18,27 @@ display_width = 1280
 display_height = 720
 crashed = False
 
-
 card_width = 150
 card_length = 200
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Cool solitaire')
+
+SUITS = ["D", "S", "C", "H"]
+FACES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "J", "Q", "K"]
+
+class Card:
+
+    suit = ""
+    face = ""
+
+    def __init__(self, nFace, nSuit):
+        suit = nSuit
+        face = nFace
+
+    def image(slef):
+        temp = pygame.image.load("Cards/PNG/{}{}.png".format(self.face, self.suit))
+        return pygame.transform.scale(temp, (card_width,card_length))
 
 
 #faceDown = pygame.image.load('Cards/PNG/gosnel.jpg')
