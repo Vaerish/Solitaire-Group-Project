@@ -31,97 +31,30 @@ class Card:
 
     suit = ""
     face = ""
+    image = None
 
     def __init__(self, nFace, nSuit):
-        suit = nSuit
-        face = nFace
-
-    def image(self):
-        temp = pygame.image.load("Cards/PNG/{}{}.png".format(self.face, self.suit))
-        return pygame.transform.scale(temp, (card_width,card_length))
+        self.suit = nSuit
+        self.face = nFace
+        self.image = pygame.image.load("Cards/PNG/{}{}.png".format(self.face, self.suit))
+        self.image = pygame.transform.scale(self.image, (card_width,card_length))
 
 
 #faceDown = pygame.image.load('Cards/PNG/gosnel.jpg')
 #faceDown = pygame.transform.scale(faceDown,(card_width,card_length))
-diamondA = pygame.image.load('Cards/PNG/AD.png')
-diamondA = pygame.transform.scale(diamondA, (card_width,card_length))
-clubA = pygame.image.load('Cards/PNG/AC.png')
-clubA = pygame.transform.scale(clubA, (card_width, card_length))
-heartA = pygame.image.load('Cards/PNG/AH.png')
-heartA = pygame.transform.scale(heartA, (card_width, card_length))
-spadeA = pygame.image.load('Cards/PNG/AS.png')
-spadeA = pygame.transform.scale(spadeA, (card_width, card_length))
-diamond6 = pygame.image.load('Cards/PNG/6D.png')
-diamond6 = pygame.transform.scale(diamond6, (card_width, card_length))
-club6 = pygame.image.load('Cards/PNG/6C.png')
-club6  = pygame.transform.scale(club6 , (card_width, card_length))
-heart6 = pygame.image.load('Cards/PNG/6H.png')
-heart6  = pygame.transform.scale(heart6, (card_width, card_length))
-spade6 = pygame.image.load('Cards/PNG/6S.png')
-spade6  = pygame.transform.scale(spade6, (card_width, card_length))
-diamond7 = pygame.image.load('Cards/PNG/7D.png')
-diamond7 = pygame.transform.scale(diamond7, (card_width, card_length))
-club7 = pygame.image.load('Cards/PNG/7C.png')
-club7 = pygame.transform.scale(club7, (card_width, card_length))
-heart7 = pygame.image.load('Cards/PNG/7H.png')
-heart7 = pygame.transform.scale(heart7, (card_width, card_length))
-spade7 = pygame.image.load('Cards/PNG/7S.png')
-spade7 = pygame.transform.scale(spade7, (card_width, card_length))
-diamond8 = pygame.image.load('Cards/PNG/8D.png')
-diamond8 = pygame.transform.scale(diamond8, (card_width, card_length))
-club8 = pygame.image.load('Cards/PNG/8C.png')
-club8 = pygame.transform.scale(club8, (card_width, card_length))
-heart8 = pygame.image.load('Cards/PNG/8H.png')
-heart8 = pygame.transform.scale(heart8, (card_width, card_length))
-spade8 = pygame.image.load('Cards/PNG/8S.png')
-spade8 = pygame.transform.scale(spade8, (card_width, card_length))
-diamond9 = pygame.image.load('Cards/PNG/9D.png')
-diamond9 = pygame.transform.scale(diamond9, (card_width, card_length))
-club9 = pygame.image.load('Cards/PNG/9C.png')
-club9 = pygame.transform.scale(club9, (card_width, card_length))
-heart9 = pygame.image.load('Cards/PNG/9H.png')
-heart9 = pygame.transform.scale(heart9, (card_width, card_length))
-spade9 = pygame.image.load('Cards/PNG/9S.png')
-spade9 = pygame.transform.scale(spade9, (card_width, card_length))
-diamond10 = pygame.image.load('Cards/PNG/10D.png')
-diamond10 = pygame.transform.scale(diamond10, (card_width, card_length))
-club10 = pygame.image.load('Cards/PNG/10C.png')
-club10 = pygame.transform.scale(club10, (card_width, card_length))
-heart10 = pygame.image.load('Cards/PNG/10H.png')
-heart10 = pygame.transform.scale(heart10, (card_width, card_length))
-spade10 = pygame.image.load('Cards/PNG/10S.png')
-spade10 = pygame.transform.scale(spade10, (card_width, card_length))
-diamondJ = pygame.image.load('Cards/PNG/JD.png')
-diamondJ = pygame.transform.scale(diamondJ, (card_width, card_length))
-clubJ = pygame.image.load('Cards/PNG/JC.png')
-clubJ = pygame.transform.scale(clubJ, (card_width, card_length))
-heartJ = pygame.image.load('Cards/PNG/JH.png')
-heartJ = pygame.transform.scale(heartJ, (card_width, card_length))
-spadeJ = pygame.image.load('Cards/PNG/JS.png')
-spadeJ = pygame.transform.scale(spadeJ, (card_width, card_length))
-diamondQ = pygame.image.load('Cards/PNG/QD.png')
-diamondQ = pygame.transform.scale(diamondQ, (card_width, card_length))
-clubQ = pygame.image.load('Cards/PNG/QC.png')
-clubQ = pygame.transform.scale(clubQ, (card_width, card_length))
-heartQ = pygame.image.load('Cards/PNG/QH.png')
-heartQ = pygame.transform.scale(heartQ, (card_width, card_length))
-spadeQ = pygame.image.load('Cards/PNG/QS.png')
-spadeQ = pygame.transform.scale(spadeQ, (card_width, card_length))
-diamondK = pygame.image.load('Cards/PNG/KD.png')
-diamondK = pygame.transform.scale(diamondK, (card_width, card_length))
-clubK = pygame.image.load('Cards/PNG/KC.png')
-clubK = pygame.transform.scale(clubK, (card_width, card_length))
-heartK = pygame.image.load('Cards/PNG/KH.png')
-heartK = pygame.transform.scale(heartK, (card_width, card_length))
-spadeK = pygame.image.load('Cards/PNG/KS.png')
-spadeK = pygame.transform.scale(spadeK, (card_width, card_length))
+
+
+def generateDeck():
+    deck = []
+    for suit in SUITS:
+        for face in FACES:
+            card = Card(face, suit)
+            deck.append(card)
+    return deck
 
 
 
-deck = [diamondA, clubA, heartA, spadeA, diamond6, club6, heart6, spade6, diamond7, club7, heart7, spade7, diamond8,
-        club8, heart8, spade8,
-        diamond9, club9, heart9, spade9, diamond10, club10, heart10, spade10, diamondJ, clubJ, heartJ,
-        spadeJ, diamondQ, clubQ, heartQ, spadeQ, diamondK, clubK, heartK, spadeK, diamondA]
+deck = generateDeck()
 
 
 def things(thingx, thingy, thingw, thingh, color):
@@ -249,7 +182,7 @@ def layout(screen):
 
 def cardDis(x, y):
     randomCard = random.randint(0, len(deck) - 1)
-    gameDisplay.blit(deck[randomCard], (x, y))
+    gameDisplay.blit(deck[randomCard].image, (x, y))
 
 
 menu()
