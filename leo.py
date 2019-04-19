@@ -225,6 +225,9 @@ def menu():
 clock = pygame.time.Clock()
 
 def layout(screen):
+    x = 150
+    y = 210
+
     background = pygame.image.load('Cards/PNG/gosnel.jpg')
     background = pygame.transform.scale(background,(display_width,display_height))
     screen.blit(background,(0,0))
@@ -234,9 +237,8 @@ def layout(screen):
     # screen.blit(background, (180, 20))
     # screen.blit(background, (260, 20))
     outlineCard = pygame.image.load('Cards/PNG/deck_background.png')
-    outlineCard = pygame.transform.scale(outlineCard, (80, 100))
+    outlineCard = pygame.transform.scale(outlineCard, (x, y))
     screen.blit(outlineCard, (20, 20))
-    # screen.blit(outlineCard, (100, 20))
     screen.blit(outlineCard, (180, 20))
     screen.blit(outlineCard, (360, 20))
 
@@ -244,11 +246,11 @@ def layout(screen):
     screen.blit(outlineCard, (560, 20))
 
     backofcardRed = pygame.image.load('Cards/PNG/red_back.png')
-    backofcardRed = pygame.transform.scale(backofcardRed, (80, 100))
+    backofcardRed = pygame.transform.scale(backofcardRed, (150, 190))
     backofcardPurple = pygame.image.load('Cards/PNG/purple_back.png')
-    backofcardPurple = pygame.transform.scale(backofcardPurple, (80, 100))
+    backofcardPurple = pygame.transform.scale(backofcardPurple, (150, 190))
     backofcardYellow = pygame.image.load('Cards/PNG/yellow_back.png')
-    backofcardYellow = pygame.transform.scale(backofcardYellow, (80, 100))
+    backofcardYellow = pygame.transform.scale(backofcardYellow, (150, 190))
 
     screen.blit(backofcardRed, (20, 50))
     mouseX, mouseY = pygame.mouse.get_pos()
@@ -265,9 +267,10 @@ def layout(screen):
 
 
 def cardDis(x,y):
-        
-        randomCard = random.randint(0,len(deck)-1)
-        gameDisplay.blit(deck[randomCard], (x, y))
+
+    randomCard = random.randint(0,len(deck)-1)
+    print(randomCard)
+    gameDisplay.blit(deck[randomCard], (x, y))
 
 
 
