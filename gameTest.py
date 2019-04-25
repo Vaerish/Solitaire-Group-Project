@@ -62,12 +62,13 @@ class CardStack:
     __touched = 0
 
     # Class constructor.  Takes a list of Cards, and whether they have been touched
-    def __init__(self, stack, touched = False):
+    def __init__(self, stack, touched = False, numTouched=0):
         self.__cards = stack
-        self.__touched = 0 if touched else len(self.__cards) - 1
+        self.__touched = numTouched if touched else len(self.__cards)
     
     def __add__(self, other):
         self.append(other)
+        return self
     
     def __str__(self):
         return str(self.__cards)
@@ -75,26 +76,84 @@ class CardStack:
     def __repr__(self):
         return str(self.__cards)
     
+    def __getitem__(self, key):
+        return self.__cards[key]
+
+    def __len__(self):
+        return len(self.__cards)
+    
     # Returns the stack as a list of Cards
     def stack(self):
         return self.__cards
 
-    # Adds a CardStack to this one.  Note that this assumes that all added
-    #   Cards are considered "touched"
+    # Adds a CardStack to this one
     def append(self, stack):
         self.__cards += stack.stack()
+        self.__touched += stack.touched()
     
     # Removes a number of Cards from the stack and returns them as a CardStack
     def remove(self, numCards):
-        removed = CardStack(self.__cards[-1*numCards:], True)
+        numRemoved = 0
+        if len(self.__cards) - self.__touched < numCards:
+            numRemoved = numCards - (len(self.__cards) - self.__touched)
+        removed = CardStack(self.__cards[-1*numCards:], True, numRemoved)
         self.__cards = self.__cards[:-1*numCards]
         if self.__touched > len(self.__cards):
-            self.__touched = len(self.__cards) - 1
+            self.__touched = len(self.__cards)
         return removed
+
+    def pop(self, index):
+        del self.__cards[:index + 1]
+        if self.__touched >= index:
+            self.__touched -= index
     
     # Returns __touched
     def touched(self):
         return self.__touched
+    
+    def setTouched(self, touched):
+        self.__touched = touched
+
+
+
+# Recursively checks for validity, returns the longest valid CardStack
+# This can be used for all aspects of game logic.  Here's how:
+#   * Can we pick up this stack (or sub-stack)?:
+#       If that stack and what this function returns when fed that stack are
+#           the same length, yes
+#   * Can we place this card stack here?
+#       If this stack appended on the end of where we're trying to place it
+#           is fed into this function, and the return value is longer than the
+#           list we're trying to place, then we can
+#   * Is this stack "done"?
+#       If that stack and what this function returns when fed that stack are
+#           the same length, yes
+#   * Have we won the game?
+#       If we have exactly 8 (not 9!) complete stacks and there is no card
+#           in the free space, then yes
+def validStack(stack, i=0):
+    if len(stack) - i <= 1:
+        return stack
+    elif len(stack) - i == 2:
+        if stack[0 + i].number:
+            if stack[1 + i].number and int(stack[0 + i].face) - 1 == int(stack[1 + i].face) and not stack[0 + i].color == stack[1 + i].color:
+                stack.setTouched(0)
+                print("1 {}, {}".format(stack, i))
+            else:
+                stack.pop(i)
+                print("2 {}, {}".format(stack, i))
+        else:
+            if not stack[1 + i].number and stack[1 + i].face == stack[0 + i].face:
+                stack.setTouched(0)
+                print("3 {}, {}".format(stack, i))
+            else:
+                stack.pop(i)
+                print("4 {}, {}".format(stack, i))
+        return stack
+    else:
+        right = stack.remove(1)
+        print("calling on {} and {}, {}".format(stack, right, i))
+        return validStack(validStack(stack, 0 + i) + right, 1 + i)
 
 
 
@@ -114,6 +173,8 @@ def generateDeck():
 
 deck = generateDeck()
 
+test = CardStack([Card("K", "C"), Card("10", "H"), Card("9", "C"), Card("8", "D"), Card("K", "D"), Card("J", "D")])
+print(validStack(test))
 
 def things(thingx, thingy, thingw, thingh, color):
     pygame.draw.rect(gameDisplay, color, [thingx, thingy, thingw, thingh])
