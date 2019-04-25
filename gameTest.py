@@ -45,6 +45,13 @@ class Card:
         self.image = pygame.transform.scale(self.image, (card_width,card_length))
         self.color = "R" if self.suit in RED else "B"
         self.number = self.face.isdigit()
+    
+    def __str__(self):
+        return "{}{}".format(self.face, self.suit)
+
+
+    def __repr__(self):
+        return "{}{}".format(self.face, self.suit)
 
 # A stack of cards.  The "top" of the stack is at the end of the list
 class CardStack:
@@ -60,6 +67,15 @@ class CardStack:
         self.__cards = stack
         self.__touched = 0 if touched else len(self.__cards) - 1
     
+    def __add__(self, other):
+        self.append(other)
+    
+    def __str__(self):
+        return str(self.__cards)
+
+    def __repr__(self):
+        return str(self.__cards)
+    
     # Returns the stack as a list of Cards
     def stack(self):
         return self.__cards
@@ -73,7 +89,8 @@ class CardStack:
     def remove(self, numCards):
         removed = CardStack(self.__cards[-1*numCards:], True)
         self.__cards = self.__cards[:-1*numCards]
-        self.__touched = len(self.__cards) - 1
+        if self.__touched > len(self.__cards):
+            self.__touched = len(self.__cards) - 1
         return removed
     
     # Returns __touched
