@@ -138,21 +138,21 @@ def validStack(stack, i=0):
         if stack[0 + i].number:
             if stack[1 + i].number and int(stack[0 + i].face) - 1 == int(stack[1 + i].face) and not stack[0 + i].color == stack[1 + i].color:
                 stack.setTouched(0)
-                print("1 {}, {}".format(stack, i))
+                # print("1 {}, {}".format(stack, i))
             else:
                 stack.pop(i)
-                print("2 {}, {}".format(stack, i))
+                # print("2 {}, {}".format(stack, i))
         else:
             if not stack[1 + i].number and stack[1 + i].face == stack[0 + i].face:
                 stack.setTouched(0)
-                print("3 {}, {}".format(stack, i))
+                # print("3 {}, {}".format(stack, i))
             else:
                 stack.pop(i)
-                print("4 {}, {}".format(stack, i))
+                # print("4 {}, {}".format(stack, i))
         return stack
     else:
         right = stack.remove(1)
-        print("calling on {} and {}, {}".format(stack, right, i))
+        # print("calling on {} and {}, {}".format(stack, right, i))
         return validStack(validStack(stack, 0 + i) + right, 1 + i)
 
 
