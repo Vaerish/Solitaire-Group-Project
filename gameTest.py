@@ -1,7 +1,6 @@
 import pygame
 import time
 import random
-from pygame.locals import *
 
 pygame.init()
 
@@ -24,26 +23,69 @@ card_length = 200
 gameDisplay = pygame.display.set_mode((display_width, display_height))
 pygame.display.set_caption('Cool solitaire')
 
+RED = ["D", "H"]
+BLACK = ["S", "C"]
+
 SUITS = ["D", "S", "C", "H"]
-FACES = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "J", "Q", "K"]
+FACES = ["6", "7", "8", "9", "10", "J", "Q", "K", "A"]
 
+# It's, ya know, a card.  Has all the member variables needed for rule checking and such
 class Card:
-
     suit = ""
     face = ""
+    color = ""
+    number = False
     image = None
 
-    def __init__(self, nFace, nSuit):
-        self.suit = nSuit
-        self.face = nFace
+    # Constructor, takes a face and a suit
+    def __init__(self, face, suit):
+        self.suit = suit
+        self.face = face
         self.image = pygame.image.load("Cards/PNG/{}{}.png".format(self.face, self.suit))
         self.image = pygame.transform.scale(self.image, (card_width,card_length))
+        self.color = "R" if self.suit in RED else "B"
+        self.number = self.face.isdigit()
+
+# A stack of cards.  The "top" of the stack is at the end of the list
+class CardStack:
+    # a list of Cards
+    __cards = []
+    # keeps track of which cards have been "touched".  This means they have been
+    #   moved by the user, and will be evaluated by the rules.  This is an index
+    #   of __cards, where everything after it has been touched
+    __touched = 0
+
+    # Class constructor.  Takes a list of Cards, and whether they have been touched
+    def __init__(self, stack, touched = False):
+        self.__cards = stack
+        self.__touched = 0 if touched else len(self.__cards) - 1
+    
+    # Returns the stack as a list of Cards
+    def stack(self):
+        return self.__cards
+
+    # Adds a CardStack to this one.  Note that this assumes that all added
+    #   Cards are considered "touched"
+    def append(self, stack):
+        self.__cards += stack.stack()
+    
+    # Removes a number of Cards from the stack and returns them as a CardStack
+    def remove(self, numCards):
+        removed = CardStack(self.__cards[-1*numCards:], True)
+        self.__cards = self.__cards[:-1*numCards]
+        self.__touched = len(self.__cards) - 1
+        return removed
+    
+    # Returns __touched
+    def touched(self):
+        return self.__touched
+
 
 
 #faceDown = pygame.image.load('Cards/PNG/gosnel.jpg')
 #faceDown = pygame.transform.scale(faceDown,(card_width,card_length))
 
-
+# generates a complete list of Cards
 def generateDeck():
     deck = []
     for suit in SUITS:
