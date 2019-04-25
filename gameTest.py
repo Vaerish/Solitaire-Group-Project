@@ -49,7 +49,6 @@ class Card:
     def __str__(self):
         return "{}{}".format(self.face, self.suit)
 
-
     def __repr__(self):
         return "{}{}".format(self.face, self.suit)
 
