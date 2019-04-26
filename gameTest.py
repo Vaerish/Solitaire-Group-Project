@@ -4,8 +4,8 @@ import random
 
 pygame.init()
 
-black = (0,0,0)
-white = (255, 255, 255) #color definitions
+black = (0, 0, 0)
+white = (255, 255, 255)  # color definitions
 gray = (83, 85, 83)
 red = (153, 18, 18)
 green = (47, 110, 41)
@@ -29,6 +29,7 @@ BLACK = ["S", "C"]
 SUITS = ["D", "S", "C", "H"]
 FACES = ["6", "7", "8", "9", "10", "J", "Q", "K", "A"]
 
+
 # It's, ya know, a card.  Has all the member variables needed for rule checking and such
 class Card:
     suit = ""
@@ -42,15 +43,16 @@ class Card:
         self.suit = suit
         self.face = face
         self.image = pygame.image.load("Cards/PNG/{}{}.png".format(self.face, self.suit))
-        self.image = pygame.transform.scale(self.image, (card_width,card_length))
+        self.image = pygame.transform.scale(self.image, (card_width, card_length))
         self.color = "R" if self.suit in RED else "B"
         self.number = self.face.isdigit()
-    
+
     def __str__(self):
         return "{}{}".format(self.face, self.suit)
 
     def __repr__(self):
         return "{}{}".format(self.face, self.suit)
+
 
 # Recursively checks for validity, returns the longest valid CardStack
 # This can be used for all aspects of game logic.  Here's how:
@@ -72,7 +74,10 @@ def validStack(stack, i=0):
         return stack
     elif len(stack) - i == 2:
         if stack[0 + i].number:
-            if not (stack[1 + i].number and int(stack[0 + i].face) - 1 == int(stack[1 + i].face) and not stack[0 + i].color == stack[1 + i].color):
+            if not (stack[1 + i].number and int(stack[0 + i].face) - 1 == int(stack[1 + i].face) and not stack[
+                                                                                                             0 + i].color ==
+                                                                                                         stack[
+                                                                                                             1 + i].color):
                 del stack[:i + 1]
         else:
             if not (not stack[1 + i].number and stack[1 + i].face == stack[0 + i].face):
@@ -81,15 +86,16 @@ def validStack(stack, i=0):
     else:
         return validStack(validStack(stack[:-1], 0 + i) + stack[-1:], 1 + i)
 
+
 # removes numCards number of cards from a stack, and returns them
 def pickUp(stack, numCards):
-    removed = stack[-1*numCards:]
-    del stack[-1*numCards:]
+    removed = stack[-1 * numCards:]
+    del stack[-1 * numCards:]
     return removed
 
 
-#faceDown = pygame.image.load('Cards/PNG/gosnel.jpg')
-#faceDown = pygame.transform.scale(faceDown,(card_width,card_length))
+# faceDown = pygame.image.load('Cards/PNG/gosnel.jpg')
+# faceDown = pygame.transform.scale(faceDown,(card_width,card_length))
 
 # generates a complete list of Cards
 def generateDeck():
@@ -101,11 +107,11 @@ def generateDeck():
     return deck
 
 
-
 deck = generateDeck()
 
 test = [Card("K", "C"), Card("10", "H"), Card("9", "C"), Card("8", "D"), Card("K", "D"), Card("J", "D")]
 print(validStack(test))
+
 
 def things(thingx, thingy, thingw, thingh, color):
     pygame.draw.rect(gameDisplay, color, [thingx, thingy, thingw, thingh])
@@ -181,6 +187,42 @@ def game():
         clock.tick(15)
 
 
+def rules():
+    intro = True
+    while intro:
+        for event in pygame.event.get():
+                # print(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+        gameDisplay.fill(gray)
+        button("return", 50, 100, 200, 50, red, bright_red, menuQ)
+        ruleText = pygame.font.Font("freesansbold.ttf", 12)
+        # create a text suface object,
+        # on which text is drawn on it.
+        TextSurf, TextRect = text_objects('Number cards are stacked by alternating color and decreasing value,',ruleText)
+        TextRect.center = ((display_width / 2), (display_height / 2))
+        gameDisplay.blit(TextSurf, TextRect)
+        TextSurf, TextRect = text_objects('and can be moved together as a stack of any size. Face cards are stacked by suit ', ruleText)
+        TextRect.center = ((display_width / 2), (display_height / 2) + 15)
+        gameDisplay.blit(TextSurf, TextRect)
+        TextSurf, TextRect = text_objects('and in any order, and can also be moved as a stack. However, a completed stack of face cards ', ruleText)
+        TextRect.center = ((display_width / 2), (display_height / 2) + 30)
+        gameDisplay.blit(TextSurf, TextRect)
+        TextSurf, TextRect = text_objects('placed directly on the board will become immovable. To win, sort the dealt cards into four completed', ruleText)
+        TextRect.center = ((display_width / 2), (display_height / 2) + 45)
+        gameDisplay.blit(TextSurf, TextRect)
+        TextSurf, TextRect = text_objects(' stacks of number cards and four complete stacks of face cards. The free cell in the corner can store a single card of any type.', ruleText)
+        TextRect.center = ((display_width / 2), (display_height / 2) + 65)
+        gameDisplay.blit(TextSurf, TextRect)
+        pygame.display.update()
+        mouse = pygame.mouse.get_pos()
+        clock.tick(15)
+
+def menuQ():
+    menu()
+
+
 def menu():
     intro = True
     while intro:
@@ -197,9 +239,8 @@ def menu():
         msg = "Go"
         button(msg, 150, 450, 200, 50, green, bright_green, game)
         button("Quit", 900, 450, 200, 50, red, bright_red, quitGame)
-
+        button("Rules", 500, 450, 200, 50, white, white, rules)
         mouse = pygame.mouse.get_pos()
-
         pygame.display.update()
         clock.tick(15)
 
@@ -208,7 +249,7 @@ clock = pygame.time.Clock()
 
 
 def layout(screen):
-    #outlineCard = pygame.image.load('Cards/PNG/gosnel.jpg')
+    # outlineCard = pygame.image.load('Cards/PNG/gosnel.jpg')
     # screen.blit(outlineCard, (20, 20))
     # screen.blit(outlineCard, (100, 20))
     # screen.blit(outlineCard, (180, 20))
@@ -238,4 +279,3 @@ def cardDis(x, y):
 menu()
 pygame.quit()
 quit()
-
