@@ -168,6 +168,9 @@ def shuffle():
 # I am working on a button to link between them though
 def game():
     mouse = pygame.mouse.get_pos()
+    pygame.mixer.music.load("Elevator-music.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
     global crashed
     x = (display_width * 0.25)
     y = (display_height * .5)
@@ -175,6 +178,7 @@ def game():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
+                pygame.mixer.music.stop()
                 quit()
         ###########################################################################
         # this function uses to create a button to shuffering the cards
