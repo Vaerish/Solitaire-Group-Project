@@ -9,6 +9,7 @@ white = (255, 255, 255)  # color definitions
 gray = (83, 85, 83)
 red = (153, 18, 18)
 green = (47, 110, 41)
+cyan = (0,238,238)
 
 bright_red = (46, 7, 7)
 bright_green = (16, 34, 14)
@@ -138,6 +139,11 @@ def quitGame():
     pygame.quit()
     quit()
 
+def quitInGame():
+    print("Thanks for playing")
+    pygame.quit
+    quit()
+
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -168,6 +174,7 @@ def shuffle():
 # I am working on a button to link between them though
 def game():
     mouse = pygame.mouse.get_pos()
+    layout(gameDisplay)
     pygame.mixer.music.load("Elevator-music.mp3")
     pygame.mixer.music.set_volume(0.5)
     pygame.mixer.music.play(-1)
@@ -187,6 +194,7 @@ def game():
         # #########################################################################
 
         button("Refresh", 700, 0, 100, 100, white, gray, shuffle)
+        button("Leave Game", 1100, 0, 150, 100, cyan, red, quitInGame)
         pygame.display.update()
         clock.tick(15)
 
@@ -253,26 +261,28 @@ clock = pygame.time.Clock()
 
 
 def layout(screen):
-    # outlineCard = pygame.image.load('Cards/PNG/gosnel.jpg')
-    # screen.blit(outlineCard, (20, 20))
-    # screen.blit(outlineCard, (100, 20))
-    # screen.blit(outlineCard, (180, 20))
-    # screen.blit(outlineCard, (260, 20))
-    #
-    # # waste
-    # screen.blit(outlineCard, (560, 20))
-    #
-    # backofcardRed = pygame.image.load('Cards/PNG/red_back.png')
-    # backofcardRed = pygame.transform.scale(backofcardRed, (140, 140))
-    # backofcardPurple = pygame.image.load('Cards/PNG/purple_back.png')
-    # backofcardPurple = pygame.transform.scale(backofcardPurple, (140, 140))
-    # backofcardYellow = pygame.image.load('Cards/PNG/yellow_back.png')
-    # backofcardYellow = pygame.transform.scale(backofcardYellow, (140, 140))
-    #
-    # screen.blit(backofcardRed, (725, 20))
-    # screen.blit(backofcardPurple, (750, 20))
-    # screen.blit(backofcardYellow, (780, 20))
+    x = 150
+    y = 210
     screen.fill(bright_green)
+    outlineCard = pygame.image.load('Cards/PNG/deck_background.png')
+    outlineCard = pygame.transform.scale(outlineCard, (x, y))
+    screen.blit(outlineCard, (20, 20))
+    screen.blit(outlineCard, (180, 20))
+    screen.blit(outlineCard, (360, 20))
+
+    screen.blit(outlineCard, (560, 20))
+    backofcardRed = pygame.image.load('Cards/PNG/red_back.png')
+    backofcardRed = pygame.transform.scale(backofcardRed, (150, 190))
+    backofcardPurple = pygame.image.load('Cards/PNG/purple_back.png')
+    backofcardPurple = pygame.transform.scale(backofcardPurple, (150, 190))
+    backofcardYellow = pygame.image.load('Cards/PNG/yellow_back.png')
+    backofcardYellow = pygame.transform.scale(backofcardYellow, (150, 190))
+
+    screen.blit(backofcardRed, (20, 50))
+    mouseX, mouseY = pygame.mouse.get_pos()
+    # screen.blit(backofcardRed, (mouseX - 50, mouseY - 50))
+    screen.blit(backofcardPurple, (180, 50))
+    screen.blit(backofcardYellow, (360, 50))
 
 
 def cardDis(x, y):
