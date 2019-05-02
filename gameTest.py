@@ -24,6 +24,8 @@ crashed = False
 card_width = 100 
 card_length = 150
 
+
+
 """
     Changing from Leo
 """
@@ -62,6 +64,8 @@ class Card:
         return "{}{}".format(self.face, self.suit)
 
 
+snowboots = pygame.image.load("Snowboots the beautiful.JPG")
+snowboots = pygame.transform.scale(snowboots, (1280, 1100))
 # Recursively checks for validity, returns the longest valid CardStack
 # This can be used for all aspects of game logic.  Here's how:
 #   * Can we pick up this stack (or sub-stack)?:
@@ -634,6 +638,7 @@ def menu():
                 pygame.quit()
                 quit()
         gameDisplay.fill(gray)
+        gameDisplay.blit(snowboots, (0, 0))
         largeText = pygame.font.Font('freesansbold.ttf', 100)
         TextSurf, TextRect = text_objects("Solitaire!", largeText)
         TextRect.center = ((display_width / 2), (display_height / 2))
