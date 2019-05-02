@@ -507,12 +507,11 @@ def shuffle():
         else:
             c = deck.pop()
             r.append(c)
-
+    layout(gameDisplay)
     return r
 
 
-# if you want to actually run game call game() at bottom as opposed to menu()
-# I am working on a button to link between them though
+
 def game():
     mouse = pygame.mouse.get_pos()
     layout(gameDisplay)
@@ -579,8 +578,8 @@ def game():
         # when the player need refresh the cards from Draw Pile or restart the game
         # #########################################################################
 
-        button("Refresh", 700, 0, 100, 100, white, gray, shuffle)
-        button("Leave Game", 1100, 0, 150, 100, cyan, red, quitInGame)
+        button("Refresh", 600, 0, 100, 100, white, gray, game)
+        button("Leave Game", 1100, 0, 150, 100, cyan, red, menuQ)
    
         pygame.display.flip()
         clock.tick(15)
@@ -673,7 +672,6 @@ def layout(screen):
     # screen.blit(backofcardRed, (mouseX - 50, mouseY - 50))
     screen.blit(backofcardPurple, (180, 50))
     screen.blit(backofcardYellow, (360, 50))
-
 
 # def cardDis(x, y):
 #     randomCard = random.randint(0, len(deck) - 1)
