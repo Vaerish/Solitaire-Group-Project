@@ -52,7 +52,7 @@ class Card:
     def __repr__(self):
         return "{}{}".format(self.face, self.suit)
 
-# Recursively checks for validity, returns the longest valid CardStack
+# Recursively checks for validity, returns the longest valid list of Cards
 # This can be used for all aspects of game logic.  Here's how:
 #   * Can we pick up this stack (or sub-stack)?:
 #       If that stack and what this function returns when fed that stack are
@@ -68,18 +68,48 @@ class Card:
 #       If we have exactly 8 (not 9!) complete stacks and there is no card
 #           in the free space, then yes
 def validStack(stack, i=0):
-    if len(stack) - i <= 1:
+    # A single card stack is always valid
+    if len(stack) - i < 1:
         return stack
+    # Checking a pair of cards to see if they are valid
     elif len(stack) - i == 2:
+        # first card is a number
         if stack[0 + i].number:
-            if not (stack[1 + i].number and int(stack[0 + i].face) - 1 == int(stack[1 + i].face) and not stack[0 + i].color == stack[1 + i].color):
+            # if second card is is not 1 number smaller than the first and the opposite color
+            if not stack[1 + i].number or int(stack[0 + i].face) - 1 != int(stack[1 + i].face) or stack[0 + i].color == stack[1 + i].color:
+                # remove second card and everything before it
                 del stack[:i + 1]
+        # first card is a face card
         else:
-            if not (not stack[1 + i].number and stack[1 + i].face == stack[0 + i].face):
+            # if second card is not a face card of the same suit
+            if stack[1 + i].number or stack[1 + i].suit != stack[0 + i].suit:
                 del stack[:i + 1]
         return stack
     else:
         return validStack(validStack(stack[:-1], 0 + i) + stack[-1:], 1 + i)
+
+def validStack2(stack):
+    if len(stack) < 2:
+        return stack
+    for i in range(len(stack)-2):
+        if not validPair(stack[-1*(i+2):-1*(i)]):
+            return stack[:-1*(i+1)]
+    return stack
+
+
+def validPair(pair):
+    # first card is a number
+    if pair[0].number:
+        # if second card is 1 number smaller than the first and the opposite color
+        if pair[1].number and int(pair[0].face) - 1 == int(pair[1].face) and pair[0].color != pair[1].color:
+            return True
+    # first card is a face card
+    else:
+        # if second card is a face card of the same suit
+        if not pair[1].number and pair[1].suit == pair[0].suit:
+            return True
+    return False
+
 
 # removes numCards number of cards from a stack, and returns them
 def pickUp(stack, numCards):
@@ -104,8 +134,17 @@ def generateDeck():
 
 deck = generateDeck()
 
-test = [Card("K", "C"), Card("10", "H"), Card("9", "C"), Card("8", "D"), Card("K", "D"), Card("J", "D")]
+test = [
+    Card("K", "C"),
+    Card("10", "H"),
+    Card("9", "C"),
+    Card("8", "D"),
+    Card("K", "D"),
+    Card("6", "H")
+    ]
+print("{}{}".format(test[4].suit,test[5].suit))
 print(validStack(test))
+print(validStack2(test))
 
 def things(thingx, thingy, thingw, thingh, color):
     pygame.draw.rect(gameDisplay, color, [thingx, thingy, thingw, thingh])
