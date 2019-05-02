@@ -13,6 +13,7 @@ red = (153, 18, 18)
 green = (47, 110, 41)
 cyan = (0,238,238)
 OLIVE = (128,128,0)
+gold = (255,215,0)
 
 bright_red = (46, 7, 7)
 bright_green = (16, 34, 14)
@@ -462,7 +463,8 @@ def quitInGame():
     print("Thanks for playing")
     pygame.quit
     quit()
-
+def returnToMenu():
+    menu()
 
 def text_objects(text, font):
     textSurface = font.render(text, True, black)
@@ -580,7 +582,8 @@ def game():
         # #########################################################################
 
         button("Refresh", 700, 0, 100, 100, white, gray, shuffle)
-        button("Leave Game", 1100, 0, 150, 100, cyan, red, quitInGame)
+        button("Leave Game", 1100, 0, 150, 100, cyan, gray, quitInGame)
+        button("Return To Menu", 900, 0, 200, 100, gold, gray, returnToMenu)
    
         pygame.display.flip()
         clock.tick(15)
@@ -651,6 +654,7 @@ def menu():
 
 
 def layout(screen):
+
     x = 150
     y = 210
     screen.fill(bright_green)
