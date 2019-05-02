@@ -8,11 +8,12 @@ clock = pygame.time.Clock()
 
 black = (0, 0, 0)
 white = (255, 255, 255)  # color definitions
-gray = (83, 85, 83)
+gray = (167, 171, 167)
 red = (153, 18, 18)
 green = (47, 110, 41)
 cyan = (0,238,238)
 OLIVE = (128,128,0)
+turquoise = (46, 204, 105)
 
 bright_red = (46, 7, 7)
 bright_green = (16, 34, 14)
@@ -66,6 +67,8 @@ class Card:
 
 snowboots = pygame.image.load("Snowboots the beautiful.JPG")
 snowboots = pygame.transform.scale(snowboots, (1280, 1100))
+whiteBackground = pygame.image.load("White-Background.JPG")
+whiteBackground = pygame.transform.scale(whiteBackground, (1280, 720))
 # Recursively checks for validity, returns the longest valid CardStack
 # This can be used for all aspects of game logic.  Here's how:
 #   * Can we pick up this stack (or sub-stack)?:
@@ -452,7 +455,7 @@ def button(msg, x, y, w, h, ic, ac, action=None):
     else:
         pygame.draw.rect(gameDisplay, ic, (x, y, w, h))
     smallText = pygame.font.Font("freesansbold.ttf", 20)
-    textSurf, textRect = text_objects(msg, smallText)
+    textSurf, textRect = text_objects(msg, smallText, black)
     textRect.center = ((x + (w / 2)), (y + (h / 2)))
     gameDisplay.blit(textSurf, textRect)
 
@@ -468,14 +471,14 @@ def quitInGame():
     quit()
 
 
-def text_objects(text, font):
-    textSurface = font.render(text, True, black)
+def text_objects(text, font, color):
+    textSurface = font.render(text, True, color)
     return textSurface, textSurface.get_rect()
 
 
 def message_display(text):
     largeText = pygame.font.Font('freesansbold.ttf', 115)
-    TextSurf, TextRect = text_objects(text, largeText)
+    TextSurf, TextRect = text_objects(text, largeText, black)
     TextRect.center = ((display_width / 2), (display_height / 2))
     gameDisplay.blit(TextSurf, TextRect)
     pygame.display.update()
@@ -573,7 +576,8 @@ def game():
                 m_card.click_up(deck_list)
                 
                     
-        gameDisplay.fill(bright_green)
+        gameDisplay.fill(turquoise)
+        gameDisplay.blit(whiteBackground, (0, 0))
         for item in deck_list:
             item.draw_card(gameDisplay,card_dict)
         m_card.draw(gameDisplay,card_dict)    
@@ -603,22 +607,22 @@ def rules():
         ruleText = pygame.font.Font("freesansbold.ttf", 26)
         # create a text suface object,
         # on which text is drawn on it.
-        TextSurf, TextRect = text_objects('Number cards are stacked by alternating color and decreasing value,',ruleText)
+        TextSurf, TextRect = text_objects('Number cards are stacked by alternating color and decreasing value,',ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3))
         gameDisplay.blit(TextSurf, TextRect)
-        TextSurf, TextRect = text_objects('and can be moved together as a stack of any size.', ruleText)
+        TextSurf, TextRect = text_objects('and can be moved together as a stack of any size.', ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3) + 40)
         gameDisplay.blit(TextSurf, TextRect)
-        TextSurf, TextRect = text_objects('Face cards are stacked by suit and in any order, and can also be moved as a stack.', ruleText)
+        TextSurf, TextRect = text_objects('Face cards are stacked by suit and in any order, and can also be moved as a stack.', ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3) + 80)
         gameDisplay.blit(TextSurf, TextRect)
-        TextSurf, TextRect = text_objects('However, a completed stack of face cards placed directly on the board will become immovable', ruleText)
+        TextSurf, TextRect = text_objects('However, a completed stack of face cards placed directly on the board will become immovable', ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3) + 120)
         gameDisplay.blit(TextSurf, TextRect)
-        TextSurf, TextRect = text_objects('To win, sort the dealt cards into four completed  stacks of number cards and ', ruleText)
+        TextSurf, TextRect = text_objects('To win, sort the dealt cards into four completed  stacks of number cards and ', ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3) + 160)
         gameDisplay.blit(TextSurf, TextRect)
-        TextSurf, TextRect = text_objects('four complete stacks of face cards. The free cell in the corner can store a single card of any type.',ruleText)
+        TextSurf, TextRect = text_objects('four complete stacks of face cards. The free cell in the corner can store a single card of any type.',ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3) + 200)
         gameDisplay.blit(TextSurf, TextRect)
         pygame.display.update()
@@ -640,7 +644,7 @@ def menu():
         gameDisplay.fill(gray)
         gameDisplay.blit(snowboots, (0, 0))
         largeText = pygame.font.Font('freesansbold.ttf', 100)
-        TextSurf, TextRect = text_objects("Solitaire!", largeText)
+        TextSurf, TextRect = text_objects("Solitaire!", largeText, white)
         TextRect.center = ((display_width / 2), (display_height / 2))
         gameDisplay.blit(TextSurf, TextRect)
         msg = "Go"
@@ -658,7 +662,7 @@ def menu():
 def layout(screen):
     x = 150
     y = 210
-    screen.fill(bright_green)
+    screen.fill(turquoise)
     outlineCard = pygame.image.load('Cards/PNG/deck_background.png')
     outlineCard = pygame.transform.scale(outlineCard, (x, y))
     screen.blit(outlineCard, (20, 20))
