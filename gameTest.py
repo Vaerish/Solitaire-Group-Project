@@ -13,11 +13,7 @@ red = (153, 18, 18)
 green = (47, 110, 41)
 cyan = (0,238,238)
 OLIVE = (128,128,0)
-<<<<<<< HEAD
 turquoise = (46, 204, 105)
-=======
-gold = (255,215,0)
->>>>>>> 3e286f63dc070b22aa46563cf62c7cca3cbe16ae
 
 bright_red = (46, 7, 7)
 bright_green = (16, 34, 14)
@@ -69,15 +65,10 @@ class Card:
         return "{}{}".format(self.face, self.suit)
 
 
-<<<<<<< HEAD
 snowboots = pygame.image.load("Snowboots the beautiful.jpg")
 snowboots = pygame.transform.scale(snowboots, (1280, 1100))
 whiteBackground = pygame.image.load("White-Background.jpg")
 whiteBackground = pygame.transform.scale(whiteBackground, (1280, 720))
-=======
-snowboots = pygame.image.load("Snowboots the beautiful.JPG")
-snowboots = pygame.transform.scale(snowboots, (1280, 1100))
->>>>>>> 3e286f63dc070b22aa46563cf62c7cca3cbe16ae
 # Recursively checks for validity, returns the longest valid CardStack
 # This can be used for all aspects of game logic.  Here's how:
 #   * Can we pick up this stack (or sub-stack)?:
@@ -94,47 +85,21 @@ snowboots = pygame.transform.scale(snowboots, (1280, 1100))
 #       If we have exactly 8 (not 9!) complete stacks and there is no card
 #           in the free space, then yes
 def validStack(stack, i=0):
-    # A single card stack is always valid
-    if len(stack) - i < 1:
+    if len(stack) - i <= 1:
         return stack
-    # Checking a pair of cards to see if they are valid
     elif len(stack) - i == 2:
-        # first card is a number
         if stack[0 + i].number:
-            # if second card is is not 1 number smaller than the first and the opposite color
-            if not stack[1 + i].number or int(stack[0 + i].face) - 1 != int(stack[1 + i].face) or stack[0 + i].color == stack[1 + i].color:
-                # remove second card and everything before it
+            if not (stack[1 + i].number and int(stack[0 + i].face) - 1 == int(stack[1 + i].face) and not stack[
+                                                                                                             0 + i].color ==
+                                                                                                         stack[
+                                                                                                             1 + i].color):
                 del stack[:i + 1]
-        # first card is a face card
         else:
-            # if second card is not a face card of the same suit
-            if stack[1 + i].number or stack[1 + i].suit != stack[0 + i].suit:
+            if not (not stack[1 + i].number and stack[1 + i].face == stack[0 + i].face):
                 del stack[:i + 1]
         return stack
     else:
         return validStack(validStack(stack[:-1], 0 + i) + stack[-1:], 1 + i)
-
-def validStack2(stack):
-    if len(stack) < 2:
-        return stack
-    for i in range(len(stack)-2):
-        if not validPair(stack[-1*(i+2):-1*(i)]):
-            return stack[:-1*(i+1)]
-    return stack
-
-
-def validPair(pair):
-    # first card is a number
-    if pair[0].number:
-        # if second card is 1 number smaller than the first and the opposite color
-        if pair[1].number and int(pair[0].face) - 1 == int(pair[1].face) and pair[0].color != pair[1].color:
-            return True
-    # first card is a face card
-    else:
-        # if second card is a face card of the same suit
-        if not pair[1].number and pair[1].suit == pair[0].suit:
-            return True
-    return False
 
 
 # removes numCards number of cards from a stack, and returns them
@@ -406,7 +371,6 @@ class Deck_Waste:
 
 test = [Card("K", "C"), Card("10", "H"), Card("9", "C"), Card("8", "D"), Card("K", "D"), Card("J", "D")]
 print(validStack(test))
-print(validStack2(test))
 
 
 def things(thingx, thingy, thingw, thingh, color):
@@ -438,8 +402,7 @@ def quitInGame():
     print("Thanks for playing")
     pygame.quit
     quit()
-def returnToMenu():
-    menu()
+
 
 def text_objects(text, font, color):
     textSurface = font.render(text, True, color)
@@ -484,12 +447,13 @@ def shuffle():
         else:
             c = deck.pop()
             r.append(c)
-    layout(gameDisplay)
+
     return r
 
 
-
-def game():
+# if you want to actually run game call game() at bottom as opposed to menu()
+# I am working on a button to link between them though
+def game(isWin = None):
     mouse = pygame.mouse.get_pos()
     layout(gameDisplay)
     pygame.mixer.music.load("Elevator-music.mp3")
@@ -497,12 +461,13 @@ def game():
     pygame.mixer.music.play(-1)
     global crashed
     isReset = False
-    emptyPileCounter = 0
+    isGiveUp = False
+    
     x = (display_width * 0.25)
     y = (display_height * .5)
 
     ######################### Leo's code ##############################################################
-    card_list = shuffle()
+    card_list = shuffle() if isWin is None else winning_Deck()
     deck_list =[]
     counter =30
     for i in range(9):
@@ -513,8 +478,8 @@ def game():
         deck_list[i].add_card(card_list[:4])
         del card_list[:4]
     deck_list.append(Deck_Waste(500,0))
-    deck_list.append(Deck_Waste(300,0))
-    deck_list.append(Deck_Waste(100,0))
+    # deck_list.append(Deck_Waste(300,0))
+    # deck_list.append(Deck_Waste(100,0))
 
 
     m_card = Moved_card()
@@ -533,6 +498,9 @@ def game():
                 if mouse[0]>=700 and mouse[0]<=800:
                     if mouse[1]>=0 and mouse[1]<=100:
                         isReset = True
+                if mouse[0]>=900 and mouse[0]<=1000:
+                    if mouse[1]>=0 and mouse[1]<=100:
+                        isGiveUp = True              
                 for item in deck_list:
                     item.click_down(m_card)
                 
@@ -544,10 +512,11 @@ def game():
                     
         gameDisplay.fill(turquoise)
         gameDisplay.blit(whiteBackground, (0, 0))
-        pygame.draw.ellipse(gameDisplay,OLIVE,[122,40,60,60],5)
-        pygame.draw.ellipse(gameDisplay,OLIVE,[322,40,60,60],5)
+        # pygame.draw.ellipse(gameDisplay,OLIVE,[122,40,60,60],5)
+        # pygame.draw.ellipse(gameDisplay,OLIVE,[322,40,60,60],5)
         pygame.draw.ellipse(gameDisplay,OLIVE,[522,40,60,60],5)
         fullStack = 0
+        emptyPileCounter = 0
         for item in deck_list:
             if(len(item.cards) == 0):
                 emptyPileCounter = emptyPileCounter + 1
@@ -555,7 +524,7 @@ def game():
                 fullStack = fullStack +1          
             item.draw_card(gameDisplay,card_dict)
         m_card.draw(gameDisplay,card_dict)
-        if(emptyPileCounter == 4 and fullStack ==4):
+        if(emptyPileCounter == 6 and fullStack ==4):
                 pygame.draw.rect(gameDisplay,cyan,[230,200,250,25])
                 gameDisplay.blit(text,[250,200])
         ###########################################################################
@@ -563,30 +532,33 @@ def game():
         # It is used for testing purpose but could be use in the game
         # when the player need refresh the cards from Draw Pile or restart the game
         # #########################################################################
-<<<<<<< HEAD
         if isReset is True:
             button("Refresh", 700, 0, 100, 100, white, gray, reset(m_card))
             isReset = False
+        elif isGiveUp is True:
+            button("Winning", 900, 0, 100, 100, white, gray,reset(m_card,isGiveUp))
+            isGiveUp = False
         button("Refresh", 700, 0, 100, 100, white, gray)
+        button("Winning", 900, 0, 100, 100, white, gray)
         button("Leave Game", 1100, 0, 150, 100, cyan, red, quitInGame)
-=======
-
-        button("Refresh", 700, 0, 100, 100, white, gray, shuffle)
-        button("Leave Game", 1100, 0, 150, 100, cyan, gray, quitInGame)
-        button("Return To Menu", 900, 0, 200, 100, gold, gray, returnToMenu)
->>>>>>> 3e286f63dc070b22aa46563cf62c7cca3cbe16ae
    
         pygame.display.flip()
-        clock.tick(15)
+        clock.tick(20)
 
-def reset(moved_card):
+def reset(moved_card,isWin=None):
     moved_card.moved_card == []
-    game()
+    game(isWin)
 
-def winning():
-    deck = []
-    deck.append(Card(FACES[8]+RED[0]))
-    deck.append(Card(FACES[7]+SUITS[1]))
+def winning_Deck():
+    return [Card("A", "D"), Card("K", "S"), Card("Q", "D"), Card("J", "S"), 
+            Card("10", "D"), Card("9", "S"),Card("8", "D"),Card("7", "S"),
+            Card("6", "D"),Card("A", "H"),Card("K", "C"),Card("Q", "H"),
+            Card("J", "C"),Card("10", "H"),Card("9", "C"),Card("8", "H"),Card("7", "S"),Card("6", "H"),
+            Card("A", "S"), Card("K", "D"), Card("Q", "S"), Card("J", "D"), 
+            Card("10", "S"), Card("9", "D"),Card("8", "S"),Card("7", "D"),
+            Card("6", "S"),Card("A", "C"),Card("K", "H"),Card("Q", "C"),
+            Card("J", "H"),Card("10", "C"),Card("9", "H"),Card("8", "C"),Card("7", "H"),Card("6", "C")]
+
 
 def rules():
     intro = True
@@ -654,7 +626,6 @@ def menu():
 
 
 def layout(screen):
-
     x = 150
     y = 210
     screen.fill(turquoise)
@@ -677,6 +648,7 @@ def layout(screen):
     # screen.blit(backofcardRed, (mouseX - 50, mouseY - 50))
     screen.blit(backofcardPurple, (180, 50))
     screen.blit(backofcardYellow, (360, 50))
+
 
 # def cardDis(x, y):
 #     randomCard = random.randint(0, len(deck) - 1)
