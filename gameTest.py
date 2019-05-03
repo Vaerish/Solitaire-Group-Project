@@ -8,11 +8,12 @@ clock = pygame.time.Clock()
 
 black = (0, 0, 0)
 white = (255, 255, 255)  # color definitions
-gray = (83, 85, 83)
+gray = (167, 171, 167)
 red = (153, 18, 18)
 green = (47, 110, 41)
 cyan = (0,238,238)
 OLIVE = (128,128,0)
+turquoise = (46, 204, 105)
 
 bright_red = (46, 7, 7)
 bright_green = (16, 34, 14)
@@ -23,6 +24,8 @@ crashed = False
 
 card_width = 100 
 card_length = 150
+
+
 
 """
     Changing from Leo
@@ -62,6 +65,10 @@ class Card:
         return "{}{}".format(self.face, self.suit)
 
 
+snowboots = pygame.image.load("Snowboots the beautiful.jpg")
+snowboots = pygame.transform.scale(snowboots, (1280, 1100))
+whiteBackground = pygame.image.load("White-Background.jpg")
+whiteBackground = pygame.transform.scale(whiteBackground, (1280, 720))
 # Recursively checks for validity, returns the longest valid CardStack
 # This can be used for all aspects of game logic.  Here's how:
 #   * Can we pick up this stack (or sub-stack)?:
@@ -130,17 +137,17 @@ class Moved_card(object):
     def click_up(self,deck_list):
         if(len(self.moved_card)) > 0 :
             for item in deck_list:  
-                if not isinstance(item,Deck_Waste):
-                    if item.check_pos() and item.check_card(self.moved_card,pygame.mouse.get_pos()):
-                        item.add_card(self.moved_card)
-                        self.moved = False
-                        self.moved_card = []
-                        if isinstance(self.cards, Deck_Tableu):
-                            self.cards.show_card()
-                        self.cards = None
-                        break
+                if item.check_pos() and item.check_card(self.moved_card,pygame.mouse.get_pos()):
+                    item.add_card(self.moved_card)
+                    self.moved = False
+                    self.moved_card = []
+                    # if isinstance(self.cards, Deck_Tableu):
+                    #     self.cards.show_card()
+                    self.cards = None
+                    break
             else: #els statement must be same line with for, 
-                self.cards.add_card(self.moved_card)
+                if self.cards is not None:
+                    self.cards.add_card(self.moved_card)
                 self.moved = False
                 self.moved_card = []
                 self.cards = None    
@@ -165,16 +172,10 @@ class Deck_Tableu:
         #call parent's constructor:
         self.cards = []
         self.rect = pygame.Rect(x,y,card_length,card_width)
-        self.hidden = []
         self.y = y
+    """
 
-    def extend_list(self,lst):
-        self.hidden.extend(lst)
-        self.cards.append(self.hidden.pop())
-        if len(self.hidden) > 0:
-            for i in range(len(self.hidden)):
-                self.rect.top += 32  
-    
+    """
     def check_pos(self):
         """ this check if the cursor is on the card"""
         pos = pygame.mouse.get_pos()
@@ -190,18 +191,18 @@ class Deck_Tableu:
         """This will draw all the cards on the screen"""
         pygame.draw.rect(screen,black,[self.rect.left,self.rect.top,card_width,card_length],2)
         i = self.y
-        if len(self.hidden) > 0:
-            for item in self.hidden:
-                pygame.draw.rect(screen,cyan,[self.rect.left,i,card_width,card_length])
-                pygame.draw.rect(screen,black,[self.rect.left,i,card_width,card_length],2)
-                i += 32
+        # if len(self.hidden) > 0:
+        #     for item in self.hidden:
+        #         pygame.draw.rect(screen,cyan,[self.rect.left,i,card_width,card_length])
+        #         pygame.draw.rect(screen,black,[self.rect.left,i,card_width,card_length],2)
+        #         i += 32
         if len(self.cards) > 0:          
             for item in self.cards:             
                 gameDisplay.blit(card_dict[(str)(item)],(self.rect.left,i))
                 i += 32
                 
     def add_card(self,card):
-        if len(self.cards) > 0 or len(self.hidden) > 0:
+        if len(self.cards) > 0 :
             for i in range(len(card)):
                 self.rect.top += 32
         else:
@@ -224,7 +225,7 @@ class Deck_Tableu:
                     card.moved = True
                     card.cards = self
                     card.moved_card.extend(lst)
-                    if len(self.cards) > 0 or len(self.hidden) > 0:
+                    if len(self.cards) > 0:
                         self.rect.top -= 32
                     break
                 else:
@@ -234,9 +235,9 @@ class Deck_Tableu:
                 self.rect.top = top
                 self.cards.extend(lst)
 
-    def show_card(self):
-        if len(self.cards) == 0 and len(self.hidden) > 0:
-            self.cards.append(self.hidden.pop())
+    # def show_card(self):
+    #     if len(self.cards) == 0:
+    #         self.cards.append()
 
     """
         I have to use this way to run the game logic, please replaces with your recursion logic
@@ -308,106 +309,45 @@ class Deck_Waste:
         #call parent's constructor:
         self.cards = []
         self.rect = pygame.Rect(x,y,card_width,card_length)
-        self.hidden_cards = []
-        self.cards_list = []
-        self.x = x
-        self.y = y
 
-    def click_down(self,card):
-        """This is used when the user press the mouse button"""
-        if self.check_pos() and len(self.cards) > 0:
-            pos = pygame.mouse.get_pos()
-            
-            selected_card = None
-            # c = self.cards.pop()
-            # selected_card = getCardFromList(self.cards, pos)
-            """
-                Trying to build the will for player can get any card from pile waste
-            """
-            print(self.cards)
-            if(pos[0]>150 and pos[1]<=250):
-                selected_card = self.cards[0]
-                del self.cards[0]
-            elif(pos[0]>250 and pos[0]<= 320):
-                selected_card = self.cards[1]
-                del self.cards[1]       
-            elif(pos[0]>350 and pos[0]<=450):
-                selected_card = self.cards[2]
-                del self.cards[2]
-            card.moved_card.append(selected_card)
-            print(self.cards_list)
-            self.cards_list.remove(selected_card)
-            card.card_d = (pos[0] - self.rect.left,pos[1] - self.rect.top)
-            card.moved = True
-            card.cards = self
-            self.rect.left -= 100
-        else:
-            pos = pygame.mouse.get_pos()
-            flag = False
-            if pos[0] >= 30 and pos[0] <= 120:
-                if pos[1] >= 30 and pos[1] <= 130:
-                    flag = True
-            if flag:
-                self.rect.left = self.x
-                if len(self.hidden_cards) > 0:
-                    self.cards = []
-                    for i in range(3):
-                        c = self.hidden_cards.pop()
-                        self.cards_list.append(c)
-                        self.cards.append(c)
-                        if len(self.hidden_cards) == 0 and i < 2:
-                            break
-                        
-                else:
-                    self.hidden_cards.extend(self.cards_list)
-                    self.cards_list = []
-                    self.cards = []
-
-                if len(self.cards) > 1:
-                    for i in range(len(self.cards)):
-                        if i > 0:
-                            self.rect.left += 100
-
-    def getCardFromList(list_of_card, mouse_position):
-        if(mouse_position[1] > 100 and mouse_position[1]<=200):
-            return list_of_card[0]
-   
     def check_pos(self):
-        """ this check if the cursor is on the card"""
+        """This check if the cursor is on the card"""
         pos = pygame.mouse.get_pos()
-        print(self.rect)
+        print(pos)
         if pos[0] >= self.rect.left and pos[0] <= self.rect.right:
             if pos[1] >= self.rect.top and pos[1] <= self.rect.bottom:
-                print("hello")
                 return True
             else:
                 return False
         else:
             return False
 
-    def draw_card(self,screen,card_dict):
-        """This will draw all the cards on the screen"""
-        x = self.x
-        y = self.y
-        if len(self.hidden_cards) > 0:
-            pygame.draw.rect(screen,cyan,[30,30,card_width,card_length])
-            pygame.draw.rect(screen,black,[30,30,card_width,card_length],2)
-            if len(self.cards_list) > 0 and len(self.cards) > 0:
-                for item in self.cards:
-                    screen.blit(card_dict[(str)(item)],[x,30])
-                    x += 100
-        else:
-            if len(self.cards_list) > 0 and len(self.cards) > 0:
-                for item in self.cards:
-                    screen.blit(card_dict[(str)(item)],[x,30])
-                    x += 100
-            pygame.draw.ellipse(screen,OLIVE,[60,60,50,60],5)
+    def check_card(self,moved_card, mouse_position):
+        if(len(moved_card) == 1):
+            card = moved_card[0]
+            if(len(self.cards)==0):
+                return True
+
+    def click_down(self,card):
+        """This is used when the user press the mouse button"""
+        if self.check_pos() and len(self.cards) > 0:
+            pos = pygame.mouse.get_pos()
+            card.moved_card.append(self.cards.pop())
+            card.card_d = (pos[0] - self.rect.left,pos[1] - self.rect.top)
+            card.moved = True
+            card.cards = self
 
     def add_card(self,card):
         self.cards.extend(card)
-        self.cards_list.extend(card)
-        print(self.cards)
-        # self.rect.left += 100
+
+    def draw_card(self,screen,card_dict):
+        """This will draw all the cards on the screen"""
+        pygame.draw.rect(screen,black,[self.rect.left,self.rect.top,card_width,card_length],2)
+        if len(self.cards) > 0:
+            screen.blit(card_dict[(str)(self.cards[-1])],[self.rect.left,self.rect.top])
+
+
+
 
 
 
@@ -448,7 +388,7 @@ def button(msg, x, y, w, h, ic, ac, action=None):
     else:
         pygame.draw.rect(gameDisplay, ic, (x, y, w, h))
     smallText = pygame.font.Font("freesansbold.ttf", 20)
-    textSurf, textRect = text_objects(msg, smallText)
+    textSurf, textRect = text_objects(msg, smallText, black)
     textRect.center = ((x + (w / 2)), (y + (h / 2)))
     gameDisplay.blit(textSurf, textRect)
 
@@ -464,14 +404,14 @@ def quitInGame():
     quit()
 
 
-def text_objects(text, font):
-    textSurface = font.render(text, True, black)
+def text_objects(text, font, color):
+    textSurface = font.render(text, True, color)
     return textSurface, textSurface.get_rect()
 
 
 def message_display(text):
     largeText = pygame.font.Font('freesansbold.ttf', 115)
-    TextSurf, TextRect = text_objects(text, largeText)
+    TextSurf, TextRect = text_objects(text, largeText, black)
     TextRect.center = ((display_width / 2), (display_height / 2))
     gameDisplay.blit(TextSurf, TextRect)
     pygame.display.update()
@@ -516,41 +456,32 @@ def shuffle():
 def game():
     mouse = pygame.mouse.get_pos()
     layout(gameDisplay)
-    # pygame.mixer.music.load("Elevator-music.mp3")
-    # pygame.mixer.music.set_volume(0.5)
-    # pygame.mixer.music.play(-1)
+    pygame.mixer.music.load("Elevator-music.mp3")
+    pygame.mixer.music.set_volume(0.5)
+    pygame.mixer.music.play(-1)
     global crashed
+    isReset = False
+    emptyPileCounter = 0
     x = (display_width * 0.25)
     y = (display_height * .5)
 
     ######################### Leo's code ##############################################################
     card_list = shuffle()
-
-    
-    deck_list = [Deck_Waste(130,0),Deck_Tableu(30,250),Deck_Tableu(200,250),
-                Deck_Tableu(350,250),Deck_Tableu(500,250),Deck_Tableu(650,250),
-                Deck_Tableu(800,250),Deck_Tableu(950,250),Deck_Tableu(1100,250),
-                Deck_Tableu(500,0) ]
-    m_card = Moved_card()
+    deck_list =[]
+    counter =30
+    for i in range(9):
+        deck_list.append(Deck_Tableu(counter,250))
+        counter +=140
    #The code below will distribute all the cards on the tablue piles.  
-    deck_list[1].extend_list(card_list[:4])
-    del card_list[:4]
-    deck_list[2].extend_list(card_list[:4])
-    del card_list[:4]
-    deck_list[3].extend_list(card_list[:4])
-    del card_list[:4]
-    deck_list[4].extend_list(card_list[:4])
-    del card_list[:4]
-    deck_list[5].extend_list(card_list[:4])
-    del card_list[:4]
-    deck_list[6].extend_list(card_list[:4])
-    del card_list[:4]
-    deck_list[7].extend_list(card_list[:4])
-    del card_list[:4]
-    deck_list[8].extend_list(card_list[:4])
-    del card_list[:4]
+    for i in range(len(deck_list)):
+        deck_list[i].add_card(card_list[:4])
+        del card_list[:4]
+    deck_list.append(Deck_Waste(500,0))
+    deck_list.append(Deck_Waste(300,0))
+    deck_list.append(Deck_Waste(100,0))
 
-    deck_list[0].hidden_cards.extend(card_list)
+
+    m_card = Moved_card()
     game_over = False
     font = pygame.font.Font(None,25)
     text = font.render("Congratulations, You Won!",True,black)   
@@ -562,29 +493,57 @@ def game():
                 pygame.mixer.music.stop()
                 quit()
             if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse = pygame.mouse.get_pos()
+                if mouse[0]>=700 and mouse[0]<=800:
+                    if mouse[1]>=0 and mouse[1]<=100:
+                        isReset = True
                 for item in deck_list:
                     item.click_down(m_card)
+                
+                
             if event.type == pygame.MOUSEBUTTONUP:
-                print ("button {} released in the position {}".format(event.button, event.pos))
                 m_card.click_up(deck_list)
+
                 
                     
-        gameDisplay.fill(bright_green)
+        gameDisplay.fill(turquoise)
+        gameDisplay.blit(whiteBackground, (0, 0))
+        pygame.draw.ellipse(gameDisplay,OLIVE,[122,40,60,60],5)
+        pygame.draw.ellipse(gameDisplay,OLIVE,[322,40,60,60],5)
+        pygame.draw.ellipse(gameDisplay,OLIVE,[522,40,60,60],5)
+        fullStack = 0
         for item in deck_list:
+            if(len(item.cards) == 0):
+                emptyPileCounter = emptyPileCounter + 1
+            elif(len(item.cards) == 9 and item.cards[0].face == "A"):
+                fullStack = fullStack +1          
             item.draw_card(gameDisplay,card_dict)
-        m_card.draw(gameDisplay,card_dict)    
+        m_card.draw(gameDisplay,card_dict)
+        if(emptyPileCounter == 4 and fullStack ==4):
+                pygame.draw.rect(gameDisplay,cyan,[230,200,250,25])
+                gameDisplay.blit(text,[250,200])
         ###########################################################################
         # this function uses to create a button to shuffering the cards
         # It is used for testing purpose but could be use in the game
         # when the player need refresh the cards from Draw Pile or restart the game
         # #########################################################################
-
-        button("Refresh", 700, 0, 100, 100, white, gray, shuffle)
+        if isReset is True:
+            button("Refresh", 700, 0, 100, 100, white, gray, reset(m_card))
+            isReset = False
+        button("Refresh", 700, 0, 100, 100, white, gray)
         button("Leave Game", 1100, 0, 150, 100, cyan, red, quitInGame)
    
         pygame.display.flip()
         clock.tick(15)
 
+def reset(moved_card):
+    moved_card.moved_card == []
+    game()
+
+def winning():
+    deck = []
+    deck.append(Card(FACES[8]+RED[0]))
+    deck.append(Card(FACES[7]+SUITS[1]))
 
 def rules():
     intro = True
@@ -599,22 +558,22 @@ def rules():
         ruleText = pygame.font.Font("freesansbold.ttf", 26)
         # create a text suface object,
         # on which text is drawn on it.
-        TextSurf, TextRect = text_objects('Number cards are stacked by alternating color and decreasing value,',ruleText)
+        TextSurf, TextRect = text_objects('Number cards are stacked by alternating color and decreasing value,',ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3))
         gameDisplay.blit(TextSurf, TextRect)
-        TextSurf, TextRect = text_objects('and can be moved together as a stack of any size.', ruleText)
+        TextSurf, TextRect = text_objects('and can be moved together as a stack of any size.', ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3) + 40)
         gameDisplay.blit(TextSurf, TextRect)
-        TextSurf, TextRect = text_objects('Face cards are stacked by suit and in any order, and can also be moved as a stack.', ruleText)
+        TextSurf, TextRect = text_objects('Face cards are stacked by suit and in any order, and can also be moved as a stack.', ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3) + 80)
         gameDisplay.blit(TextSurf, TextRect)
-        TextSurf, TextRect = text_objects('However, a completed stack of face cards placed directly on the board will become immovable', ruleText)
+        TextSurf, TextRect = text_objects('However, a completed stack of face cards placed directly on the board will become immovable', ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3) + 120)
         gameDisplay.blit(TextSurf, TextRect)
-        TextSurf, TextRect = text_objects('To win, sort the dealt cards into four completed  stacks of number cards and ', ruleText)
+        TextSurf, TextRect = text_objects('To win, sort the dealt cards into four completed  stacks of number cards and ', ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3) + 160)
         gameDisplay.blit(TextSurf, TextRect)
-        TextSurf, TextRect = text_objects('four complete stacks of face cards. The free cell in the corner can store a single card of any type.',ruleText)
+        TextSurf, TextRect = text_objects('four complete stacks of face cards. The free cell in the corner can store a single card of any type.',ruleText, black)
         TextRect.center = ((display_width / 2), (display_height / 3) + 200)
         gameDisplay.blit(TextSurf, TextRect)
         pygame.display.update()
@@ -634,8 +593,9 @@ def menu():
                 pygame.quit()
                 quit()
         gameDisplay.fill(gray)
+        gameDisplay.blit(snowboots, (0, 0))
         largeText = pygame.font.Font('freesansbold.ttf', 100)
-        TextSurf, TextRect = text_objects("Solitaire!", largeText)
+        TextSurf, TextRect = text_objects("Solitaire!", largeText, white)
         TextRect.center = ((display_width / 2), (display_height / 2))
         gameDisplay.blit(TextSurf, TextRect)
         msg = "Go"
@@ -653,7 +613,7 @@ def menu():
 def layout(screen):
     x = 150
     y = 210
-    screen.fill(bright_green)
+    screen.fill(turquoise)
     outlineCard = pygame.image.load('Cards/PNG/deck_background.png')
     outlineCard = pygame.transform.scale(outlineCard, (x, y))
     screen.blit(outlineCard, (20, 20))
